@@ -6,10 +6,13 @@ import com.example.fundmatch.domain.entities.Role;
 import com.example.fundmatch.domain.entities.User;
 import com.example.fundmatch.domain.mappers.UserMapper;
 import com.example.fundmatch.domain.vm.AuthResponseVM;
+import com.example.fundmatch.domain.vm.TokenResponseVM;
 import com.example.fundmatch.repository.RoleRepository;
 import com.example.fundmatch.repository.UserRepository;
 import com.example.fundmatch.security.JwtService;
 import com.example.fundmatch.service.interfaces.AuthService;
+import com.example.fundmatch.service.interfaces.RefreshTokenService;
+import com.example.fundmatch.shared.exception.CustomException;
 import com.example.fundmatch.shared.exception.EmailAlreadyInUseException;
 import com.example.fundmatch.shared.exception.InvalidCredentialsException;
 import lombok.AllArgsConstructor;
@@ -30,6 +33,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
     private final RoleRepository roleRepository;
+    private final RefreshTokenService refreshTokenService;
 
     @Override
     public AuthResponseVM register(RegisterRequest registerRequest) {
@@ -81,9 +85,22 @@ public class AuthServiceImpl implements AuthService {
         }
 
         String token = jwtService.generateToken(user, user.getId());
+        String refreshToken = refreshTokenService.createRefreshToken(user).getToken();
         AuthResponseVM authResponseVM = userMapper.toDto(user);
         authResponseVM.setToken(token);
-
+        authResponseVM.setRefreshToken(refreshToken);
         return authResponseVM;
+    }
+    @Override
+    public TokenResponseVM refreshAccessToken(String refreshToken) {
+        var token = refreshTokenService.findByToken(refreshToken)
+                .orElseThrow(() -> new CustomException("Invalid refresh token"));
+
+        String newAccessToken = jwtService.generateToken(token.getUser(), token.getUser().getId());
+        String role = token.getUser().getRoles().toString();
+        String firstname = token.getUser().getFirstName();
+        String lastname = token.getUser().getLastName();
+
+        return new TokenResponseVM(newAccessToken, refreshToken , role , firstname , lastname);
     }
 }

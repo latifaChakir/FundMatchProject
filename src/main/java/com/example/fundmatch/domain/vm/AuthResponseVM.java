@@ -21,4 +21,5 @@ public class AuthResponseVM {
     private String phoneNumber;
     private Set<Role> roles;
     private String token;
+    private String refreshToken;
 }
