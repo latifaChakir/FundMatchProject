@@ -1,0 +1,640 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1736282374575-1
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_admins
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: admin_level
+                  type: VARCHAR(255)
+            tableName: admins
+  - changeSet:
+      id: 1736282374575-2
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_documents
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+              - column:
+                  name: type
+                  type: VARCHAR(255)
+              - column:
+                  name: url
+                  type: VARCHAR(255)
+              - column:
+                  name: uploaded_at
+                  type: DATETIME
+              - column:
+                  name: is_private
+                  type: BOOLEAN
+              - column:
+                  name: project_id
+                  type: BIGINT
+            tableName: documents
+  - changeSet:
+      id: 1736282374575-3
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: event_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: user_id
+                  type: BIGINT
+            tableName: event_participants
+  - changeSet:
+      id: 1736282374575-4
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_events
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: title
+                  type: VARCHAR(255)
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+              - column:
+                  name: date
+                  type: DATETIME
+              - column:
+                  name: location
+                  type: VARCHAR(255)
+              - column:
+                  name: cost
+                  type: DOUBLE
+              - column:
+                  name: type
+                  type: VARCHAR(255)
+              - column:
+                  name: max_participants
+                  type: INT
+            tableName: events
+  - changeSet:
+      id: 1736282374575-5
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_feedbacks
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: investor_id
+                  type: BIGINT
+              - column:
+                  name: project_id
+                  type: BIGINT
+              - column:
+                  name: content
+                  type: VARCHAR(255)
+              - column:
+                  name: created_at
+                  type: DATETIME
+              - column:
+                  name: type
+                  type: VARCHAR(255)
+              - column:
+                  name: is_private
+                  type: BOOLEAN
+            tableName: feedbacks
+  - changeSet:
+      id: 1736282374575-6
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: investor_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: project_id
+                  type: BIGINT
+            tableName: investor_saved_projects
+  - changeSet:
+      id: 1736282374575-7
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_investors
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: organization
+                  type: VARCHAR(255)
+              - column:
+                  name: min_investment
+                  type: DOUBLE
+              - column:
+                  name: max_investment
+                  type: DOUBLE
+              - column:
+                  name: investment_type
+                  type: VARCHAR(255)
+              - column:
+                  name: location
+                  type: VARCHAR(255)
+            tableName: investors
+  - changeSet:
+      id: 1736282374575-8
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_meetings
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: startup_id
+                  type: BIGINT
+              - column:
+                  name: investor_id
+                  type: BIGINT
+              - column:
+                  name: datetime
+                  type: DATETIME
+              - column:
+                  name: type
+                  type: VARCHAR(255)
+              - column:
+                  name: status
+                  type: VARCHAR(255)
+              - column:
+                  name: notes
+                  type: VARCHAR(255)
+            tableName: meetings
+  - changeSet:
+      id: 1736282374575-9
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_messages
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: sender_id
+                  type: BIGINT
+              - column:
+                  name: receiver_id
+                  type: BIGINT
+              - column:
+                  name: content
+                  type: VARCHAR(255)
+              - column:
+                  name: timestamp
+                  type: DATETIME
+              - column:
+                  name: is_read
+                  type: BOOLEAN
+              - column:
+                  name: type
+                  type: VARCHAR(255)
+            tableName: messages
+  - changeSet:
+      id: 1736282374575-10
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_projects
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: title
+                  type: VARCHAR(255)
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+              - column:
+                  name: funding_amount
+                  type: DOUBLE
+              - column:
+                  name: stage
+                  type: VARCHAR(255)
+              - column:
+                  name: created_at
+                  type: DATETIME
+              - column:
+                  name: status
+                  type: VARCHAR(255)
+              - column:
+                  name: view_count
+                  type: INT
+              - column:
+                  name: startup_id
+                  type: BIGINT
+            tableName: projects
+  - changeSet:
+      id: 1736282374575-11
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_roles
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(255)
+            tableName: roles
+  - changeSet:
+      id: 1736282374575-12
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: investor_id
+                  type: BIGINT
+              - column:
+                  name: sector
+                  type: VARCHAR(255)
+            tableName: sectors_of_interest
+  - changeSet:
+      id: 1736282374575-13
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_startups
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: company_name
+                  type: VARCHAR(255)
+              - column:
+                  name: sector
+                  type: VARCHAR(255)
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+              - column:
+                  name: pitch_video_url
+                  type: VARCHAR(255)
+              - column:
+                  name: funding_needed
+                  type: DOUBLE
+              - column:
+                  name: stage
+                  type: VARCHAR(255)
+            tableName: startups
+  - changeSet:
+      id: 1736282374575-14
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_user_roles
+                  name: role_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_user_roles
+                  name: user_id
+                  type: BIGINT
+            tableName: user_roles
+  - changeSet:
+      id: 1736282374575-15
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_users
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+              - column:
+                  name: first_name
+                  type: VARCHAR(255)
+              - column:
+                  name: last_name
+                  type: VARCHAR(255)
+              - column:
+                  name: phone_number
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: is_active
+                  type: BOOLEAN
+              - column:
+                  name: created_at
+                  type: DATETIME
+              - column:
+                  name: is_verified
+                  type: BOOLEAN
+            tableName: users
+  - changeSet:
+      id: 1736282374575-16
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: name
+            constraintName: uc_roles_name
+            tableName: roles
+  - changeSet:
+      id: 1736282374575-17
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: id
+            baseTableName: admins
+            constraintName: FK_ADMINS_ON_ID
+            referencedColumnNames: id
+            referencedTableName: users
+  - changeSet:
+      id: 1736282374575-18
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: project_id
+            baseTableName: documents
+            constraintName: FK_DOCUMENTS_ON_PROJECT
+            referencedColumnNames: id
+            referencedTableName: projects
+  - changeSet:
+      id: 1736282374575-19
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: investor_id
+            baseTableName: feedbacks
+            constraintName: FK_FEEDBACKS_ON_INVESTOR
+            referencedColumnNames: id
+            referencedTableName: investors
+  - changeSet:
+      id: 1736282374575-20
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: project_id
+            baseTableName: feedbacks
+            constraintName: FK_FEEDBACKS_ON_PROJECT
+            referencedColumnNames: id
+            referencedTableName: projects
+  - changeSet:
+      id: 1736282374575-21
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: id
+            baseTableName: investors
+            constraintName: FK_INVESTORS_ON_ID
+            referencedColumnNames: id
+            referencedTableName: users
+  - changeSet:
+      id: 1736282374575-22
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: investor_id
+            baseTableName: meetings
+            constraintName: FK_MEETINGS_ON_INVESTOR
+            referencedColumnNames: id
+            referencedTableName: investors
+  - changeSet:
+      id: 1736282374575-23
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: startup_id
+            baseTableName: meetings
+            constraintName: FK_MEETINGS_ON_STARTUP
+            referencedColumnNames: id
+            referencedTableName: startups
+  - changeSet:
+      id: 1736282374575-24
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: receiver_id
+            baseTableName: messages
+            constraintName: FK_MESSAGES_ON_RECEIVER
+            referencedColumnNames: id
+            referencedTableName: users
+  - changeSet:
+      id: 1736282374575-25
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: sender_id
+            baseTableName: messages
+            constraintName: FK_MESSAGES_ON_SENDER
+            referencedColumnNames: id
+            referencedTableName: users
+  - changeSet:
+      id: 1736282374575-26
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: startup_id
+            baseTableName: projects
+            constraintName: FK_PROJECTS_ON_STARTUP
+            referencedColumnNames: id
+            referencedTableName: startups
+  - changeSet:
+      id: 1736282374575-27
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: id
+            baseTableName: startups
+            constraintName: FK_STARTUPS_ON_ID
+            referencedColumnNames: id
+            referencedTableName: users
+  - changeSet:
+      id: 1736282374575-28
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: event_id
+            baseTableName: event_participants
+            constraintName: fk_evepar_on_event
+            referencedColumnNames: id
+            referencedTableName: events
+  - changeSet:
+      id: 1736282374575-29
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: event_participants
+            constraintName: fk_evepar_on_user
+            referencedColumnNames: id
+            referencedTableName: users
+  - changeSet:
+      id: 1736282374575-30
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: investor_id
+            baseTableName: investor_saved_projects
+            constraintName: fk_invsavpro_on_investor
+            referencedColumnNames: id
+            referencedTableName: investors
+  - changeSet:
+      id: 1736282374575-31
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: project_id
+            baseTableName: investor_saved_projects
+            constraintName: fk_invsavpro_on_project
+            referencedColumnNames: id
+            referencedTableName: projects
+  - changeSet:
+      id: 1736282374575-32
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: investor_id
+            baseTableName: sectors_of_interest
+            constraintName: fk_sectors_of_interest_on_investor
+            referencedColumnNames: id
+            referencedTableName: investors
+  - changeSet:
+      id: 1736282374575-33
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: role_id
+            baseTableName: user_roles
+            constraintName: fk_userol_on_role
+            referencedColumnNames: id
+            referencedTableName: roles
+  - changeSet:
+      id: 1736282374575-34
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: user_roles
+            constraintName: fk_userol_on_user
+            referencedColumnNames: id
+            referencedTableName: users
+

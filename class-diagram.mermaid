@@ -1,0 +1,158 @@
+classDiagram
+    class User {
+        -Long id
+        -String email
+        -String password
+        -String firstName
+        -String lastName
+        -String phoneNumber
+        -UserRole role
+        -Date createdAt
+        -Boolean isVerified
+        +register()
+        +login()
+        +updateProfile()
+        +verifyEmail()
+    }
+
+    class Startup {
+        -String companyName
+        -String sector
+        -String description
+        -String pitchVideoUrl
+        -Double fundingNeeded
+        -String stage
+        -List~Document~ documents
+        -List~Project~ projects
+        +createProject()
+        +uploadDocument()
+        +viewFeedback()
+    }
+
+    class Investor {
+        -String organization
+        -List~String~ sectorsOfInterest
+        -Double minInvestment
+        -Double maxInvestment
+        -String investmentType
+        -String location
+        -List~Project~ savedProjects
+        +searchStartups()
+        +saveProject()
+        +provideFeedback()
+        +requestMeeting()
+    }
+
+    class Admin {
+        -String adminLevel
+        +moderateUsers()
+        +manageEvents()
+        +moderateComments()
+        +generateReports()
+    }
+
+    class Project {
+        -Long id
+        -String title
+        -String description
+        -Double fundingAmount
+        -String stage
+        -Date createdAt
+        -List~Document~ documents
+        -List~Feedback~ feedbacks
+        -ProjectStatus status
+        -Integer viewCount
+        +update()
+        +delete()
+        +addFeedback()
+    }
+
+    class Feedback {
+        -Long id
+        -Long investorId
+        -Long projectId
+        -String content
+        -Date createdAt
+        -FeedbackType type
+        -Boolean isPrivate
+        +create()
+        +update()
+        +delete()
+    }
+
+    class Event {
+        -Long id
+        -String title
+        -String description
+        -Date date
+        -String location
+        -Double cost
+        -EventType type
+        -Integer maxParticipants
+        -List~User~ participants
+        +register()
+        +cancel()
+        +sendReminders()
+    }
+
+    class Message {
+        -Long id
+        -Long senderId
+        -Long receiverId
+        -String content
+        -Date timestamp
+        -Boolean isRead
+        -MessageType type
+        +send()
+        +markAsRead()
+    }
+
+    class Document {
+        -Long id
+        -String name
+        -String type
+        -String url
+        -Date uploadedAt
+        -Boolean isPrivate
+        -Long projectId
+        +upload()
+        +delete()
+        +updateVisibility()
+    }
+
+    class Dashboard {
+        -Long userId
+        -List~Project~ viewedProjects
+        -List~Event~ registeredEvents
+        -List~Message~ unreadMessages
+        -List~Feedback~ recentFeedback
+        +updateStats()
+        +getNotifications()
+    }
+
+    class Meeting {
+        -Long id
+        -Long startupId
+        -Long investorId
+        -Date datetime
+        -MeetingType type
+        -MeetingStatus status
+        -String notes
+        +schedule()
+        +cancel()
+        +reschedule()
+    }
+
+    User <|-- Startup
+    User <|-- Investor
+    User <|-- Admin
+    Startup "1" -- "*" Project
+    Project "1" -- "*" Document
+    Project "1" -- "*" Feedback
+    Investor "1" -- "*" Feedback
+    User "1" -- "1" Dashboard
+    User "1" -- "*" Message
+    User "*" -- "*" Event
+    Startup "1" -- "*" Meeting
+    Investor "1" -- "*" Meeting
+    Dashboard "1" -- "*" Project
