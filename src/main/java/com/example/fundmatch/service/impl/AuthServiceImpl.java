@@ -11,12 +11,14 @@ import com.example.fundmatch.repository.UserRepository;
 import com.example.fundmatch.security.JwtService;
 import com.example.fundmatch.service.interfaces.AuthService;
 import com.example.fundmatch.shared.exception.EmailAlreadyInUseException;
+import com.example.fundmatch.shared.exception.InvalidCredentialsException;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -61,7 +63,27 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public AuthResponseVM login(LoginRequest request) {
-        return null;
+    public AuthResponseVM login(LoginRequest loginRequest) {
+        System.out.println("Login request: " + loginRequest);
+
+        Optional<User> userOptional = userRepository.findByEmail(loginRequest.getEmail());
+        if (userOptional.isEmpty()) {
+            throw new InvalidCredentialsException("Invalid email or password");
+        }
+
+        User user = userOptional.get();
+        System.out.println("Retrieved user: " + user);
+        System.out.println("Stored password: " + user.getPassword());
+        System.out.println("Provided password: " + loginRequest.getPassword());
+
+        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+            throw new InvalidCredentialsException("Invalid email or password.");
+        }
+
+        String token = jwtService.generateToken(user, user.getId());
+        AuthResponseVM authResponseVM = userMapper.toDto(user);
+        authResponseVM.setToken(token);
+
+        return authResponseVM;
     }
 }

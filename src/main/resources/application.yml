@@ -14,5 +14,7 @@ spring:
       format-sql: true
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml
+  main:
+    allow-circular-references: true  # Allow circular references in the application context
 server:
   port: 9091
