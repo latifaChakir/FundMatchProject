@@ -3,7 +3,8 @@ package com.example.fundmatch.domain.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
