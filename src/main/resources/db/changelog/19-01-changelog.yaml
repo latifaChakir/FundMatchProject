@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 1736282374575-1
+      id: 1737313310601-1
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -14,11 +14,37 @@ databaseChangeLog:
                   name: id
                   type: BIGINT
               - column:
+                  name: email
+                  type: VARCHAR(255)
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+              - column:
+                  name: first_name
+                  type: VARCHAR(255)
+              - column:
+                  name: last_name
+                  type: VARCHAR(255)
+              - column:
+                  name: phone_number
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: is_active
+                  type: BOOLEAN
+              - column:
+                  name: created_at
+                  type: DATETIME
+              - column:
+                  name: is_verified
+                  type: BOOLEAN
+              - column:
                   name: admin_level
                   type: VARCHAR(255)
             tableName: admins
   - changeSet:
-      id: 1736282374575-2
+      id: 1737313310601-2
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -52,7 +78,7 @@ databaseChangeLog:
                   type: BIGINT
             tableName: documents
   - changeSet:
-      id: 1736282374575-3
+      id: 1737313310601-3
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -70,7 +96,7 @@ databaseChangeLog:
                   type: BIGINT
             tableName: event_participants
   - changeSet:
-      id: 1736282374575-4
+      id: 1737313310601-4
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -107,7 +133,7 @@ databaseChangeLog:
                   type: INT
             tableName: events
   - changeSet:
-      id: 1736282374575-5
+      id: 1737313310601-5
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -141,7 +167,7 @@ databaseChangeLog:
                   type: BOOLEAN
             tableName: feedbacks
   - changeSet:
-      id: 1736282374575-6
+      id: 1737313310601-6
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -159,7 +185,25 @@ databaseChangeLog:
                   type: BIGINT
             tableName: investor_saved_projects
   - changeSet:
-      id: 1736282374575-7
+      id: 1737313310601-7
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: investor_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: sector_id
+                  type: BIGINT
+            tableName: investor_sector
+  - changeSet:
+      id: 1737313310601-8
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -173,8 +217,40 @@ databaseChangeLog:
                   name: id
                   type: BIGINT
               - column:
+                  name: email
+                  type: VARCHAR(255)
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+              - column:
+                  name: first_name
+                  type: VARCHAR(255)
+              - column:
+                  name: last_name
+                  type: VARCHAR(255)
+              - column:
+                  name: phone_number
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: is_active
+                  type: BOOLEAN
+              - column:
+                  name: created_at
+                  type: DATETIME
+              - column:
+                  name: is_verified
+                  type: BOOLEAN
+              - column:
                   name: organization
                   type: VARCHAR(255)
+              - column:
+                  name: experience_years
+                  type: INT
+              - column:
+                  name: average_investments_per_year
+                  type: INT
               - column:
                   name: min_investment
                   type: DOUBLE
@@ -187,9 +263,15 @@ databaseChangeLog:
               - column:
                   name: location
                   type: VARCHAR(255)
+              - column:
+                  name: investment_strategy
+                  type: VARCHAR(255)
+              - column:
+                  name: contact_info
+                  type: VARCHAR(255)
             tableName: investors
   - changeSet:
-      id: 1736282374575-8
+      id: 1737313310601-9
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -223,7 +305,7 @@ databaseChangeLog:
                   type: VARCHAR(255)
             tableName: meetings
   - changeSet:
-      id: 1736282374575-9
+      id: 1737313310601-10
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -257,7 +339,23 @@ databaseChangeLog:
                   type: VARCHAR(255)
             tableName: messages
   - changeSet:
-      id: 1736282374575-10
+      id: 1737313310601-11
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: investor_id
+                  type: BIGINT
+              - column:
+                  name: geography
+                  type: VARCHAR(255)
+            tableName: preferred_geographies
+  - changeSet:
+      id: 1737313310601-12
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -297,7 +395,38 @@ databaseChangeLog:
                   type: BIGINT
             tableName: projects
   - changeSet:
-      id: 1736282374575-11
+      id: 1737313310601-13
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_refreshtoken
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: user_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: token
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: expirated_date
+                  type: DATETIME
+            tableName: refresh_token
+  - changeSet:
+      id: 1737313310601-14
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -318,7 +447,49 @@ databaseChangeLog:
                   type: VARCHAR(255)
             tableName: roles
   - changeSet:
-      id: 1736282374575-12
+      id: 1737313310601-15
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_sectors
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(255)
+            tableName: sectors
+  - changeSet:
+      id: 1737313310601-16
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_stages
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(255)
+            tableName: stages
+  - changeSet:
+      id: 1737313310601-17
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -327,14 +498,34 @@ databaseChangeLog:
               - column:
                   constraints:
                     nullable: false
-                  name: investor_id
+                  name: sector_id
                   type: BIGINT
               - column:
-                  name: sector
-                  type: VARCHAR(255)
-            tableName: sectors_of_interest
+                  constraints:
+                    nullable: false
+                  name: startup_id
+                  type: BIGINT
+            tableName: startup_sector
   - changeSet:
-      id: 1736282374575-13
+      id: 1737313310601-18
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: stage_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: startup_id
+                  type: BIGINT
+            tableName: startup_stage
+  - changeSet:
+      id: 1737313310601-19
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -348,10 +539,35 @@ databaseChangeLog:
                   name: id
                   type: BIGINT
               - column:
-                  name: company_name
+                  name: email
                   type: VARCHAR(255)
               - column:
-                  name: sector
+                  name: password
+                  type: VARCHAR(255)
+              - column:
+                  name: first_name
+                  type: VARCHAR(255)
+              - column:
+                  name: last_name
+                  type: VARCHAR(255)
+              - column:
+                  name: phone_number
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: is_active
+                  type: BOOLEAN
+              - column:
+                  name: created_at
+                  type: DATETIME
+              - column:
+                  name: is_verified
+                  type: BOOLEAN
+              - column:
+                  constraints:
+                    nullable: false
+                  name: company_name
                   type: VARCHAR(255)
               - column:
                   name: description
@@ -363,11 +579,26 @@ databaseChangeLog:
                   name: funding_needed
                   type: DOUBLE
               - column:
-                  name: stage
+                  name: founded_year
+                  type: INT
+              - column:
+                  name: team_size
+                  type: INT
+              - column:
+                  name: revenue
+                  type: DOUBLE
+              - column:
+                  name: growth_rate
+                  type: DOUBLE
+              - column:
+                  name: headquarters
+                  type: VARCHAR(255)
+              - column:
+                  name: contact_info
                   type: VARCHAR(255)
             tableName: startups
   - changeSet:
-      id: 1736282374575-14
+      id: 1737313310601-20
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -389,7 +620,7 @@ databaseChangeLog:
                   type: BIGINT
             tableName: user_roles
   - changeSet:
-      id: 1736282374575-15
+      id: 1737313310601-21
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -431,7 +662,25 @@ databaseChangeLog:
                   type: BOOLEAN
             tableName: users
   - changeSet:
-      id: 1736282374575-16
+      id: 1737313310601-22
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: token
+            constraintName: uc_refreshtoken_token
+            tableName: refresh_token
+  - changeSet:
+      id: 1737313310601-23
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: user_id
+            constraintName: uc_refreshtoken_user
+            tableName: refresh_token
+  - changeSet:
+      id: 1737313310601-24
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -440,7 +689,25 @@ databaseChangeLog:
             constraintName: uc_roles_name
             tableName: roles
   - changeSet:
-      id: 1736282374575-17
+      id: 1737313310601-25
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: name
+            constraintName: uc_sectors_name
+            tableName: sectors
+  - changeSet:
+      id: 1737313310601-26
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: name
+            constraintName: uc_stages_name
+            tableName: stages
+  - changeSet:
+      id: 1737313310601-27
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -451,7 +718,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: users
   - changeSet:
-      id: 1736282374575-18
+      id: 1737313310601-28
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -462,7 +729,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: projects
   - changeSet:
-      id: 1736282374575-19
+      id: 1737313310601-29
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -473,7 +740,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: investors
   - changeSet:
-      id: 1736282374575-20
+      id: 1737313310601-30
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -484,7 +751,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: projects
   - changeSet:
-      id: 1736282374575-21
+      id: 1737313310601-31
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -495,7 +762,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: users
   - changeSet:
-      id: 1736282374575-22
+      id: 1737313310601-32
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -506,7 +773,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: investors
   - changeSet:
-      id: 1736282374575-23
+      id: 1737313310601-33
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -517,7 +784,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: startups
   - changeSet:
-      id: 1736282374575-24
+      id: 1737313310601-34
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -528,7 +795,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: users
   - changeSet:
-      id: 1736282374575-25
+      id: 1737313310601-35
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -539,7 +806,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: users
   - changeSet:
-      id: 1736282374575-26
+      id: 1737313310601-36
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -550,7 +817,18 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: startups
   - changeSet:
-      id: 1736282374575-27
+      id: 1737313310601-37
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: refresh_token
+            constraintName: FK_REFRESHTOKEN_ON_USER
+            referencedColumnNames: id
+            referencedTableName: users
+  - changeSet:
+      id: 1737313310601-38
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -561,7 +839,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: users
   - changeSet:
-      id: 1736282374575-28
+      id: 1737313310601-39
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -572,7 +850,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: events
   - changeSet:
-      id: 1736282374575-29
+      id: 1737313310601-40
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -583,7 +861,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: users
   - changeSet:
-      id: 1736282374575-30
+      id: 1737313310601-41
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -594,7 +872,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: investors
   - changeSet:
-      id: 1736282374575-31
+      id: 1737313310601-42
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -605,18 +883,84 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: projects
   - changeSet:
-      id: 1736282374575-32
+      id: 1737313310601-43
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
             baseColumnNames: investor_id
-            baseTableName: sectors_of_interest
-            constraintName: fk_sectors_of_interest_on_investor
+            baseTableName: investor_sector
+            constraintName: fk_invsec_on_investor
             referencedColumnNames: id
             referencedTableName: investors
   - changeSet:
-      id: 1736282374575-33
+      id: 1737313310601-44
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: sector_id
+            baseTableName: investor_sector
+            constraintName: fk_invsec_on_sector
+            referencedColumnNames: id
+            referencedTableName: sectors
+  - changeSet:
+      id: 1737313310601-45
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: investor_id
+            baseTableName: preferred_geographies
+            constraintName: fk_preferred_geographies_on_investor
+            referencedColumnNames: id
+            referencedTableName: investors
+  - changeSet:
+      id: 1737313310601-46
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: sector_id
+            baseTableName: startup_sector
+            constraintName: fk_stasec_on_sector
+            referencedColumnNames: id
+            referencedTableName: sectors
+  - changeSet:
+      id: 1737313310601-47
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: startup_id
+            baseTableName: startup_sector
+            constraintName: fk_stasec_on_startup
+            referencedColumnNames: id
+            referencedTableName: startups
+  - changeSet:
+      id: 1737313310601-48
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: stage_id
+            baseTableName: startup_stage
+            constraintName: fk_stasta_on_stage
+            referencedColumnNames: id
+            referencedTableName: stages
+  - changeSet:
+      id: 1737313310601-49
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: startup_id
+            baseTableName: startup_stage
+            constraintName: fk_stasta_on_startup
+            referencedColumnNames: id
+            referencedTableName: startups
+  - changeSet:
+      id: 1737313310601-50
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -627,7 +971,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: roles
   - changeSet:
-      id: 1736282374575-34
+      id: 1737313310601-51
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:

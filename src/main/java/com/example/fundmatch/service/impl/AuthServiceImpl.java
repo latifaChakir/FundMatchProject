@@ -68,18 +68,12 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthResponseVM login(LoginRequest loginRequest) {
-        System.out.println("Login request: " + loginRequest);
-
         Optional<User> userOptional = userRepository.findByEmail(loginRequest.getEmail());
         if (userOptional.isEmpty()) {
             throw new InvalidCredentialsException("Invalid email or password");
         }
 
         User user = userOptional.get();
-        System.out.println("Retrieved user: " + user);
-        System.out.println("Stored password: " + user.getPassword());
-        System.out.println("Provided password: " + loginRequest.getPassword());
-
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             throw new InvalidCredentialsException("Invalid email or password.");
         }

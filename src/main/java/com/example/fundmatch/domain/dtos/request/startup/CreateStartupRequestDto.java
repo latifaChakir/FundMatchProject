@@ -1,8 +1,11 @@
 package com.example.fundmatch.domain.dtos.request.startup;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,5 +30,25 @@ public class CreateStartupRequestDto {
 
     @NotBlank(message = "Startup stage is required")
     private String stage;
-}
 
+    @NotNull(message = "Founded year is required")
+    private Integer foundedYear;
+
+    @NotNull(message = "Team size is required")
+    private Integer teamSize;
+
+    @NotNull(message = "Revenue is required")
+    private Double revenue;
+
+    @NotNull(message = "Growth rate is required")
+    private Double growthRate;
+
+    @NotBlank(message = "Headquarters is required")
+    private String headquarters;
+
+    @NotBlank(message = "Contact info is required")
+    private String contactInfo;
+
+    private List<String> sectors;
+    private List<String> stages;
+}

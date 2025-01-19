@@ -5,23 +5,36 @@ import lombok.*;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "investors")
 public class Investor extends User {
     private String organization;
+    private Integer experienceYears;
+    private Integer averageInvestmentsPerYear;
+
+    @ManyToMany
+    @JoinTable(
+            name = "investor_sector",
+            joinColumns = @JoinColumn(name = "investor_id"),
+            inverseJoinColumns = @JoinColumn(name = "sector_id")
+    )
+    private List<Sector> sectors;
 
     @ElementCollection
-    @CollectionTable(name = "sectors_of_interest", joinColumns = @JoinColumn(name = "investor_id"))
-    @Column(name = "sector")
-    private List<String> sectorsOfInterest;
+    @CollectionTable(name = "preferred_geographies", joinColumns = @JoinColumn(name = "investor_id"))
+    @Column(name = "geography")
+    private List<String> preferredGeographies;
 
     private Double minInvestment;
     private Double maxInvestment;
     private String investmentType;
     private String location;
+    private String investmentStrategy;
+    private String contactInfo;
 
     @ManyToMany
     @JoinTable(
@@ -37,4 +50,3 @@ public class Investor extends User {
     @OneToMany(mappedBy = "investor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Meeting> meetings;
 }
-
