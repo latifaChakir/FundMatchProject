@@ -5,9 +5,12 @@ import com.example.fundmatch.domain.entities.Sector;
 import com.example.fundmatch.domain.vm.SectorResponseVM;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+import java.util.List;
 
+@Mapper(componentModel = "spring")
 public interface SectorMapper {
     Sector toEntity(SectorRequest stageRequest);
     SectorResponseVM toDto(Sector stage);
+
+    List<SectorResponseVM> toDtoList(List<Sector> sectors);
 }

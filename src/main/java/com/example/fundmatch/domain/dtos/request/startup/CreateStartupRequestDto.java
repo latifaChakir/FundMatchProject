@@ -1,5 +1,7 @@
 package com.example.fundmatch.domain.dtos.request.startup;
 
+import com.example.fundmatch.domain.entities.Sector;
+import com.example.fundmatch.domain.entities.Stage;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -16,9 +18,6 @@ public class CreateStartupRequestDto {
     @NotBlank(message = "Company name is required")
     private String companyName;
 
-    @NotBlank(message = "Sector is required")
-    private String sector;
-
     @NotBlank(message = "Description is required")
     @Size(max = 500, message = "Description cannot exceed 500 characters")
     private String description;
@@ -27,9 +26,6 @@ public class CreateStartupRequestDto {
 
     @NotNull(message = "Funding needed is required")
     private Double fundingNeeded;
-
-    @NotBlank(message = "Startup stage is required")
-    private String stage;
 
     @NotNull(message = "Founded year is required")
     private Integer foundedYear;
@@ -49,6 +45,6 @@ public class CreateStartupRequestDto {
     @NotBlank(message = "Contact info is required")
     private String contactInfo;
 
-    private List<String> sectors;
-    private List<String> stages;
+    private List<Sector> sectors;
+    private List<Stage> stages;
 }
