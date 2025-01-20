@@ -8,11 +8,12 @@ import org.mapstruct.Mapper;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {UserMapper.class})
 public interface InvestorMapper {
     Investor toEntity(CreateInvestorRequestDto dto);
     InvestorResponseVM toDto(Investor entity);
 
     List<InvestorResponseVM> toDtoList(List<Investor> investors);
 }
+
 

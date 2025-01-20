@@ -15,7 +15,6 @@ import java.util.*;
 @Entity
 @Builder
 @Table(name = "users")
-@Inheritance(strategy = InheritanceType.JOINED)
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,8 +25,14 @@ public class User implements UserDetails {
     private String firstName;
     private String lastName;
     private String phoneNumber;
+
     @Column(nullable = false)
     private boolean isActive;
+
+    private Boolean isVerified;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
@@ -37,10 +42,11 @@ public class User implements UserDetails {
     )
     private Set<Role> roles = new HashSet<>();
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
+    private Investor investorProfile;
 
-    private Boolean isVerified;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
+    private Startup startupProfile;
 
     @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Message> sentMessages;

@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {UserMapper.class})
 public interface StartupMapper {
     Startup toEntity(CreateStartupRequestDto dto);
     StartupResponseVM toDto(Startup entity);

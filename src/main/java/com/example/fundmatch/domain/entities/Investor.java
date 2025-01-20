@@ -11,7 +11,15 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "investors")
-public class Investor extends User {
+public class Investor {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     private String organization;
     private Integer experienceYears;
     private Integer averageInvestmentsPerYear;
