@@ -1,5 +1,6 @@
 package com.example.fundmatch.domain.vm;
 
+import com.example.fundmatch.domain.entities.Sector;
 import lombok.*;
 
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 public class InvestorResponseVM {
     private Long id;
     private String organization;
-    private List<String> sectorsOfInterest;
+    private List<Sector> sectors;
     private Double minInvestment;
     private Double maxInvestment;
     private String investmentType;

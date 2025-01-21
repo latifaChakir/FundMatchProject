@@ -1,5 +1,7 @@
 package com.example.fundmatch.service.impl;
+import com.example.fundmatch.domain.entities.Sector;
 import com.example.fundmatch.domain.entities.User;
+import com.example.fundmatch.repository.SectorRepository;
 import com.example.fundmatch.repository.UserRepository;
 import com.example.fundmatch.security.CustomUserDetails;
 import com.example.fundmatch.security.CustomUserDetailsService;
@@ -25,6 +27,7 @@ public class InvestorServiceImpl implements InvestorService {
     private final InvestorRepository investorRepository;
     private final InvestorMapper investorMapper;
     private final UserRepository userRepository;
+    private final SectorRepository sectorRepository;
 
     @Override
     public InvestorResponseVM saveInvestor(CreateInvestorRequestDto createInvestorRequestDto) {
@@ -34,16 +37,27 @@ public class InvestorServiceImpl implements InvestorService {
         if (!(principal instanceof CustomUserDetails)) {
             throw new IllegalStateException("Authentication principal is not of type CustomUserDetails");
         }
-
         CustomUserDetails userDetails = (CustomUserDetails) principal;
         Long userId = userDetails.getUserId();
+
         if (investorRepository.existsByOrganization(createInvestorRequestDto.getOrganization())) {
             throw new InvestorOrganizationAlreadyExistsException("Organization name already exists.");
         }
+
         Investor investor = investorMapper.toEntity(createInvestorRequestDto);
+
+        // Récupérer l'utilisateur
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
         investor.setUser(user);
+
+        // Récupérer les secteurs depuis la base de données
+        List<Sector> sectors = createInvestorRequestDto.getSectors().stream()
+                .map(sector -> sectorRepository.findById(sector.getId())
+                        .orElseThrow(() -> new IllegalArgumentException("Sector not found with ID: " + sector.getId())))
+                .toList();
+        investor.setSectors(sectors);
+
         Investor savedInvestor = investorRepository.save(investor);
         return investorMapper.toDto(savedInvestor);
     }
@@ -72,7 +86,7 @@ public class InvestorServiceImpl implements InvestorService {
         }
 
         existingInvestor.setOrganization(createInvestorRequestDto.getOrganization());
-        existingInvestor.setSectors(createInvestorRequestDto.getSectorsOfInterest());
+        existingInvestor.setSectors(createInvestorRequestDto.getSectors());
         existingInvestor.setMinInvestment(createInvestorRequestDto.getMinInvestment());
         existingInvestor.setMaxInvestment(createInvestorRequestDto.getMaxInvestment());
         existingInvestor.setInvestmentType(createInvestorRequestDto.getInvestmentType());

@@ -18,7 +18,7 @@ public class CreateInvestorRequestDto {
     private String organization;
 
     @NotNull(message = "Sectors of interest are required")
-    private List<Sector> sectorsOfInterest;
+    private List<Sector> sectors;
 
     @NotNull(message = "Minimum investment is required")
     @Positive(message = "Minimum investment must be greater than 0")
