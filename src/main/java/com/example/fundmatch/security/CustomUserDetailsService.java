@@ -1,5 +1,6 @@
 package com.example.fundmatch.security;
 
+import com.example.fundmatch.domain.entities.User;
 import com.example.fundmatch.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,10 +15,18 @@ public class CustomUserDetailsService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return (UserDetails) userRepository.findByEmail(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        // Rechercher l'utilisateur par email
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        // Retourner une instance de CustomUserDetails
+        return new CustomUserDetails(
+                user.getId(),
+                user.getEmail(),
+                user.getPassword(),
+                user.getAuthorities() // Exemple : fournir les rôles ou autorités
+        );
     }
 }

@@ -1,5 +1,10 @@
 package com.example.fundmatch.service.impl;
-
+import com.example.fundmatch.domain.entities.User;
+import com.example.fundmatch.repository.UserRepository;
+import com.example.fundmatch.security.CustomUserDetails;
+import com.example.fundmatch.security.CustomUserDetailsService;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
 import com.example.fundmatch.domain.dtos.request.investor.CreateInvestorRequestDto;
 import com.example.fundmatch.domain.entities.Investor;
 import com.example.fundmatch.domain.mappers.InvestorMapper;
@@ -19,14 +24,26 @@ import java.util.Optional;
 public class InvestorServiceImpl implements InvestorService {
     private final InvestorRepository investorRepository;
     private final InvestorMapper investorMapper;
+    private final UserRepository userRepository;
 
     @Override
     public InvestorResponseVM saveInvestor(CreateInvestorRequestDto createInvestorRequestDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+
+        if (!(principal instanceof CustomUserDetails)) {
+            throw new IllegalStateException("Authentication principal is not of type CustomUserDetails");
+        }
+
+        CustomUserDetails userDetails = (CustomUserDetails) principal;
+        Long userId = userDetails.getUserId();
         if (investorRepository.existsByOrganization(createInvestorRequestDto.getOrganization())) {
             throw new InvestorOrganizationAlreadyExistsException("Organization name already exists.");
         }
-
         Investor investor = investorMapper.toEntity(createInvestorRequestDto);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        investor.setUser(user);
         Investor savedInvestor = investorRepository.save(investor);
         return investorMapper.toDto(savedInvestor);
     }
