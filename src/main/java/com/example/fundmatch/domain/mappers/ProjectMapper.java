@@ -11,9 +11,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ProjectMapper {
     Project toEntity(CreateProjectRequestDto dto);
-
     ProjectResponseVM toDto(Project project);
-
     List<ProjectResponseVM> toDtoList(List<Project> projects);
 }
 

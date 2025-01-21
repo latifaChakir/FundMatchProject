@@ -1,5 +1,6 @@
 package com.example.fundmatch.domain.entities;
 
+import com.example.fundmatch.domain.enums.ProjectStage;
 import com.example.fundmatch.domain.enums.ProjectStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -21,7 +22,8 @@ public class Project {
     private String title;
     private String description;
     private Double fundingAmount;
-    private String stage;
+    @Enumerated(EnumType.STRING)
+    private ProjectStage stage;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;

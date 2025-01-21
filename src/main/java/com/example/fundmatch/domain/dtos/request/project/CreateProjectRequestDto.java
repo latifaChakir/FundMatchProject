@@ -1,7 +1,11 @@
 package com.example.fundmatch.domain.dtos.request.project;
+import com.example.fundmatch.domain.enums.ProjectStage;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 import lombok.*;
+
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,8 +21,9 @@ public class CreateProjectRequestDto {
 
     @NotNull(message = "Funding amount is required")
     private Double fundingAmount;
-
-    @NotBlank(message = "Project stage is required")
-    private String stage;
+    @PastOrPresent(message = "Created date cannot be in the future")
+    private Date createdAt;
+    @NotNull(message = "Project stage is required")
+    private ProjectStage stage;
 }
 

@@ -45,13 +45,9 @@ public class InvestorServiceImpl implements InvestorService {
         }
 
         Investor investor = investorMapper.toEntity(createInvestorRequestDto);
-
-        // Récupérer l'utilisateur
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
         investor.setUser(user);
-
-        // Récupérer les secteurs depuis la base de données
         List<Sector> sectors = createInvestorRequestDto.getSectors().stream()
                 .map(sector -> sectorRepository.findById(sector.getId())
                         .orElseThrow(() -> new IllegalArgumentException("Sector not found with ID: " + sector.getId())))

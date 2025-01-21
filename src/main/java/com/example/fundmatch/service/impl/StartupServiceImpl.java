@@ -1,14 +1,22 @@
 package com.example.fundmatch.service.impl;
 
 import com.example.fundmatch.domain.dtos.request.startup.CreateStartupRequestDto;
-import com.example.fundmatch.domain.entities.Startup;
+import com.example.fundmatch.domain.entities.*;
 import com.example.fundmatch.domain.mappers.StartupMapper;
 import com.example.fundmatch.domain.vm.StartupResponseVM;
+import com.example.fundmatch.repository.SectorRepository;
+import com.example.fundmatch.repository.StageRepository;
 import com.example.fundmatch.repository.StartupRepository;
+import com.example.fundmatch.repository.UserRepository;
+import com.example.fundmatch.security.CustomUserDetails;
 import com.example.fundmatch.service.interfaces.StartupService;
 import com.example.fundmatch.shared.exception.DuplicateResourceException;
 import com.example.fundmatch.shared.exception.ResourceNotFoundException;
+import com.example.fundmatch.shared.exception.SectorNotFoundException;
+import com.example.fundmatch.shared.exception.StageNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,13 +26,38 @@ import java.util.List;
 public class StartupServiceImpl implements StartupService {
     private final StartupRepository startupRepository;
     private final StartupMapper startupMapper;
+    private final UserRepository userRepository;
+    private final SectorRepository sectorRepository;
+    private final StageRepository stageRepository;
 
     @Override
     public StartupResponseVM saveStartup(CreateStartupRequestDto createStartupRequestDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+
+        if (!(principal instanceof CustomUserDetails)) {
+            throw new IllegalStateException("Authentication principal is not of type CustomUserDetails");
+        }
+        CustomUserDetails userDetails = (CustomUserDetails) principal;
+        Long userId = userDetails.getUserId();
+
         if (startupRepository.existsByCompanyName(createStartupRequestDto.getCompanyName())) {
             throw new DuplicateResourceException("Company name already exists.");
         }
         Startup startup = startupMapper.toEntity(createStartupRequestDto);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        startup.setUser(user);
+        List<Sector> sectors = createStartupRequestDto.getSectors().stream()
+                .map(sector -> sectorRepository.findById(sector.getId())
+                        .orElseThrow(() -> new SectorNotFoundException("Sector not found with ID: " + sector.getId())))
+                .toList();
+        startup.setSectors(sectors);
+        List<Stage> stages = createStartupRequestDto.getStages().stream()
+                .map(stage -> stageRepository.findById(stage.getId())
+                        .orElseThrow(() -> new StageNotFoundException("Stage not found with ID: " + stage.getId())))
+                .toList();
+        startup.setSectors(sectors);
         Startup savedStartup = startupRepository.save(startup);
         return startupMapper.toDto(savedStartup);
     }

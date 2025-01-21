@@ -1,5 +1,7 @@
 package com.example.fundmatch.service.impl;
-
+import com.example.fundmatch.security.CustomUserDetails;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
 import com.example.fundmatch.domain.dtos.request.auth.LoginRequest;
 import com.example.fundmatch.domain.dtos.request.auth.RegisterRequest;
 import com.example.fundmatch.domain.entities.Role;
@@ -97,4 +99,16 @@ public class AuthServiceImpl implements AuthService {
 
         return new TokenResponseVM(newAccessToken, refreshToken , role , firstname , lastname);
     }
+    public User getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof CustomUserDetails)) {
+            throw new IllegalStateException("Authentication principal is not of type CustomUserDetails");
+        }
+        CustomUserDetails userDetails = (CustomUserDetails) principal;
+        Long userId = userDetails.getUserId();
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
+    }
+
 }

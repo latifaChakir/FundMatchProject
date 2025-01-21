@@ -14,7 +14,6 @@ import java.util.List;
 public class StartupResponseVM {
     private Long id;
     private String companyName;
-    private String sector;
     private String description;
     private String pitchVideoUrl;
     private Double fundingNeeded;
