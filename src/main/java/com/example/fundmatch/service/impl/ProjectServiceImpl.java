@@ -4,6 +4,7 @@ import com.example.fundmatch.domain.dtos.request.project.CreateProjectRequestDto
 import com.example.fundmatch.domain.entities.Project;
 import com.example.fundmatch.domain.entities.Startup;
 import com.example.fundmatch.domain.entities.User;
+import com.example.fundmatch.domain.enums.ProjectStatus;
 import com.example.fundmatch.domain.mappers.ProjectMapper;
 import com.example.fundmatch.domain.vm.ProjectResponseVM;
 import com.example.fundmatch.repository.ProjectRepository;
@@ -11,6 +12,7 @@ import com.example.fundmatch.repository.StartupRepository;
 import com.example.fundmatch.service.interfaces.AuthService;
 import com.example.fundmatch.service.interfaces.ProjectService;
 import com.example.fundmatch.shared.exception.ProjectNotFoundException;
+import com.example.fundmatch.shared.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,14 +30,15 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public ProjectResponseVM saveProject(CreateProjectRequestDto projectRequest) {
         User currentUser = authService.getAuthenticatedUser();
+        System.out.println(currentUser);
         Startup startup = startupRepository.findByUserId(currentUser.getId())
-                .orElseThrow(() -> new RuntimeException("No startup associated with the current user."));
+                .orElseThrow(() -> new ResourceNotFoundException("No startup associated with the current user."));
         Project project = projectMapper.toEntity(projectRequest);
         project.setStartup(startup);
+        project.setStatus(ProjectStatus.PENDING);
         Project savedProject = projectRepository.save(project);
         return projectMapper.toDto(savedProject);
     }
-
 
     @Override
     public ProjectResponseVM getProjectById(Long id) {
@@ -50,7 +53,6 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectResponseVM updateProject(CreateProjectRequestDto projectRequest, Long id) {
         return null;
     }
-
 
     @Override
     public void deleteProject(Long id) {

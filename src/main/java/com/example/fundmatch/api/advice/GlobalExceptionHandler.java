@@ -2,6 +2,7 @@ package com.example.fundmatch.api.advice;
 
 import com.example.fundmatch.api.wrapper.ApiResponse;
 import com.example.fundmatch.shared.exception.InvalidCredentialsException;
+import com.example.fundmatch.shared.exception.ResourceNotFoundException;
 import com.example.fundmatch.shared.exception.StageNameAlreadyExistsException;
 import com.example.fundmatch.shared.exception.StageNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -57,6 +58,16 @@ public class GlobalExceptionHandler {
         ApiResponse<String> response = ApiResponse.error(
                 ex.getMessage(),
                 "/api/stages",
+                HttpStatus.BAD_REQUEST.value()
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ApiResponse<String>> handleResourceNotFoundException(ResourceNotFoundException ex) {
+        ApiResponse<String> response = ApiResponse.error(
+                ex.getMessage(),
+                "/api/startups",
                 HttpStatus.BAD_REQUEST.value()
         );
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);

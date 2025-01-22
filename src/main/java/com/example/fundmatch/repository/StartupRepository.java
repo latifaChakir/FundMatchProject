@@ -8,5 +8,4 @@ import java.util.Optional;
 public interface StartupRepository extends JpaRepository<Startup, Long> {
     boolean existsByCompanyName(String companyName);
     Optional<Startup> findByUserId(Long userId);
-
 }

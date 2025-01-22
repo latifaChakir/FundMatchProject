@@ -18,7 +18,7 @@ public class Stage {
 
     @Column(nullable = false, unique = true)
     private String name; // Ex. "Seed", "Series A", "Growth", etc.
-
-    @ManyToMany(mappedBy = "stages", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Startup> startups;
+//
+//    @ManyToMany(mappedBy = "stages", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private List<Startup> startups;
 }

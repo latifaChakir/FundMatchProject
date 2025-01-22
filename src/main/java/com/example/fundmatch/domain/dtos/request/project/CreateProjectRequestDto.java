@@ -15,15 +15,15 @@ import java.util.Date;
 public class CreateProjectRequestDto {
     @NotBlank(message = "Title is required")
     private String title;
-
     @NotBlank(message = "Description is required")
     private String description;
-
     @NotNull(message = "Funding amount is required")
     private Double fundingAmount;
     @PastOrPresent(message = "Created date cannot be in the future")
     private Date createdAt;
     @NotNull(message = "Project stage is required")
     private ProjectStage stage;
+    @NotNull(message = "viewCount is required")
+    private Integer viewCount;
 }
 
