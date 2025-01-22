@@ -54,8 +54,6 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Message> receivedMessages;
 
-    @ManyToMany(mappedBy = "participants")
-    private List<Event> events;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
