@@ -29,8 +29,6 @@ public class CreateEventRequestDto {
 
     @NotNull(message = "Event cost is required")
     private Double cost;
-
-    @NotBlank(message = "Event type is required")
     private EventType type;
 
     @NotNull(message = "Maximum number of participants is required")

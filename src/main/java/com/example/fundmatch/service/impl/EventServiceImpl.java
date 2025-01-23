@@ -22,6 +22,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventResponseVM saveEvent(CreateEventRequestDto eventRequest) {
+        System.out.println(eventRequest);
         Event event = eventMapper.toEntity(eventRequest);
         Event savedEvent = eventRepository.save(event);
         return eventMapper.toDto(savedEvent);

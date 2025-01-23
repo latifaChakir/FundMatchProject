@@ -1,12 +1,8 @@
-// EventResponseVM
 package com.example.fundmatch.domain.vm;
-
-import com.example.fundmatch.domain.entities.User;
 import com.example.fundmatch.domain.enums.EventType;
 import lombok.*;
 
 import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter
