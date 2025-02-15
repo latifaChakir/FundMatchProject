@@ -11,5 +11,6 @@ public interface AuthService {
     AuthResponseVM login(LoginRequest request);
     TokenResponseVM refreshAccessToken(String refreshToken);
     User getAuthenticatedUser();
-
+    void forgotPassword(String email);
+    void resetPassword(String token, String newPassword);
 }

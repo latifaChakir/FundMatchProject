@@ -25,6 +25,8 @@ public class User implements UserDetails {
     private String firstName;
     private String lastName;
     private String phoneNumber;
+    private String resetToken;
+    private Date resetTokenExpiration;
 
     @Column(nullable = false)
     private boolean isActive;

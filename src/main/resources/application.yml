@@ -4,17 +4,27 @@ spring:
     username: postgres
     password: latifa
     driver-class-name: org.postgresql.Driver
-    jpa:
-      properties:
-        hibernate:
-          dialect: org.hibernate.dialect.PostgreSQLDialect
+  jpa:
+    properties:
       hibernate:
-        ddl-auto: update
-      show-sql: true
-      format-sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    format-sql: true
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml
   main:
-    allow-circular-references: true  # Allow circular references in the application context
+    allow-circular-references: true
+
 server:
-    port: 9091
+  port: 9091
+
+mail:
+  host: smtp.gmail.com
+  port: 587
+  username: chakirlatifa2001@gmail.com
+  password: pleg lcgg coss bhub
+  properties:
+    mail.smtp.auth: true
+    mail.smtp.starttls.enable: true

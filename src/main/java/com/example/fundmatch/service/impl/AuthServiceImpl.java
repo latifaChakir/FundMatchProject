@@ -1,5 +1,6 @@
 package com.example.fundmatch.service.impl;
 import com.example.fundmatch.security.CustomUserDetails;
+import com.example.fundmatch.shared.exception.InvalidToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.Authentication;
 import com.example.fundmatch.domain.dtos.request.auth.LoginRequest;
@@ -18,13 +19,11 @@ import com.example.fundmatch.shared.exception.CustomException;
 import com.example.fundmatch.shared.exception.EmailAlreadyInUseException;
 import com.example.fundmatch.shared.exception.InvalidCredentialsException;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,6 +35,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserMapper userMapper;
     private final RoleRepository roleRepository;
     private final RefreshTokenService refreshTokenService;
+    private final EmailService emailService;
 
     @Override
     public AuthResponseVM register(RegisterRequest registerRequest) {
@@ -110,5 +110,34 @@ public class AuthServiceImpl implements AuthService {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
     }
+
+    @Override
+    public void forgotPassword(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+        System.out.println("User: " + user);
+        String token = UUID.randomUUID().toString();
+        user.setResetToken(token);
+        user.setResetTokenExpiration(new Date(System.currentTimeMillis() + 30 * 60 * 1000));
+
+        userRepository.save(user);
+        String resetLink = "http://localhost:4200/reset-password?token=" + token;
+        emailService.sendPasswordResetEmail(user.getEmail(), resetLink);
+    }
+
+    @Override
+    public void resetPassword(String token, String newPassword) {
+        User user = userRepository.findByResetToken(token)
+                .orElseThrow(() -> new InvalidToken("Invalid or expired token"));
+
+        if (user.getResetTokenExpiration().before(new Date())) {
+            throw new IllegalArgumentException("Token expired");
+        }
+        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setResetToken(null);
+        user.setResetTokenExpiration(null);
+        userRepository.save(user);
+    }
+
 
 }

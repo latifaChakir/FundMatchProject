@@ -1,10 +1,7 @@
 package com.example.fundmatch.api.advice;
 
 import com.example.fundmatch.api.wrapper.ApiResponse;
-import com.example.fundmatch.shared.exception.InvalidCredentialsException;
-import com.example.fundmatch.shared.exception.ResourceNotFoundException;
-import com.example.fundmatch.shared.exception.StageNameAlreadyExistsException;
-import com.example.fundmatch.shared.exception.StageNotFoundException;
+import com.example.fundmatch.shared.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -69,6 +66,15 @@ public class GlobalExceptionHandler {
         ApiResponse<String> response = ApiResponse.error(
                 ex.getMessage(),
                 "/api/startups",
+                HttpStatus.BAD_REQUEST.value()
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(InvalidToken.class)
+    public ResponseEntity<ApiResponse<String>> handleInvalidToken(InvalidToken ex) {
+        ApiResponse<String> response = ApiResponse.error(
+                ex.getMessage(),
+                "/api/auth/reset-token",
                 HttpStatus.BAD_REQUEST.value()
         );
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
