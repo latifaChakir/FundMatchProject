@@ -9,8 +9,9 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface SectorMapper {
-    Sector toEntity(SectorRequest stageRequest);
-    SectorResponseVM toDto(Sector stage);
+    Sector toEntity(SectorRequest request);
+
+    SectorResponseVM toDto(Sector sector);
 
     List<SectorResponseVM> toDtoList(List<Sector> sectors);
 }

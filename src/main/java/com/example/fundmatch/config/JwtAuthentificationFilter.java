@@ -25,7 +25,8 @@ public class JwtAuthentificationFilter  extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
     private static final List<String> PUBLIC_ENDPOINTS = Arrays.asList(
             "/api/auth/login",
-            "/api/auth/register"
+            "/api/auth/register",
+            "/api/auth/reset-password"
     );
 
     private boolean isPublicEndpoint(String servletPath) {
