@@ -5,6 +5,7 @@ import com.example.fundmatch.domain.enums.ProjectStage;
 import com.example.fundmatch.domain.enums.ProjectStatus;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @AllArgsConstructor
@@ -18,7 +19,7 @@ public class ProjectResponseVM {
     private String description;
     private Double fundingAmount;
     private ProjectStage stage;
-    private Date createdAt;
+    private LocalDate createdAt;
     private ProjectStatus status;
     private Integer viewCount;
     private StartupResponseVM startup;

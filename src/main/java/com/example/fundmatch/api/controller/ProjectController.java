@@ -49,4 +49,11 @@ public class ProjectController {
         ApiResponse<List<ProjectResponseVM>> apiResponse = ApiResponse.success(response, "/api/projects");
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
+
+    @GetMapping("/updateStatus/{id}")
+    public ResponseEntity<ApiResponse<ProjectResponseVM>> updateStatus(@PathVariable long id) {
+        ProjectResponseVM response = projectService.updateStatus(id);
+        ApiResponse<ProjectResponseVM> apiResponse = ApiResponse.success(response, "/api/projects");
+        return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
+    }
 }

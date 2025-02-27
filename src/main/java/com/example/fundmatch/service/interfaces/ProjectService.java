@@ -11,5 +11,5 @@ public interface ProjectService  {
     ProjectResponseVM updateProject(CreateProjectRequestDto projectRequest, Long id);
     void deleteProject(Long id);
     List<ProjectResponseVM> getProjects();
-
+    ProjectResponseVM updateStatus(Long projectId);
 }

@@ -5,6 +5,7 @@ import com.example.fundmatch.domain.enums.ProjectStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -25,8 +26,7 @@ public class Project {
     @Enumerated(EnumType.STRING)
     private ProjectStage stage;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
+    private LocalDate createdAt;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Document> documents;

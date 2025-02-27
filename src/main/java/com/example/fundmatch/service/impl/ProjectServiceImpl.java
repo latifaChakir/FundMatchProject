@@ -51,7 +51,17 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectResponseVM updateProject(CreateProjectRequestDto projectRequest, Long id) {
-        return null;
+        Project project = projectRepository.findById(id)
+                .orElseThrow(() -> new ProjectNotFoundException("Project not found."));
+        project.setTitle(projectRequest.getTitle());
+        project.setDescription(projectRequest.getDescription());
+        project.setFundingAmount(projectRequest.getFundingAmount());
+        project.setCreatedAt(projectRequest.getCreatedAt());
+        project.setStage(projectRequest.getStage());
+        project.setViewCount(projectRequest.getViewCount());
+
+        Project updatedProject = projectRepository.save(project);
+        return projectMapper.toDto(updatedProject);
     }
 
     @Override
@@ -67,5 +77,20 @@ public class ProjectServiceImpl implements ProjectService {
     public List<ProjectResponseVM> getProjects() {
         List<Project> projects = projectRepository.findAll();
         return projectMapper.toDtoList(projects);
+    }
+    @Override
+    public ProjectResponseVM updateStatus(Long projectId){
+        System.out.println("id"+projectId);
+        Optional<Project> projectOptional = projectRepository.findById(projectId);
+        if (projectOptional.isEmpty()) {
+            throw new ProjectNotFoundException("Projet introuvable");
+        }
+        Project project = projectOptional.get();
+        if (project.getStatus()!= ProjectStatus.PENDING) {
+            throw new IllegalStateException("Impossible de modifier de status d'un projet déjà validée");
+        }
+        project.setStatus(ProjectStatus.COMPLETED);
+        projectRepository.save(project);
+        return projectMapper.toDto(project);
     }
 }

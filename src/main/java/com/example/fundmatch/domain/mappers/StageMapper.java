@@ -10,6 +10,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface StageMapper {
     Stage toEntity(StageRequest stageRequest);
+
     StageResponseVM toDto(Stage stage);
 
     List<StageResponseVM> toDtoList(List<Stage> stages);

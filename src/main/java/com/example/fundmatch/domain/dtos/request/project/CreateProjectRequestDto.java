@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @AllArgsConstructor
@@ -20,7 +21,7 @@ public class CreateProjectRequestDto {
     @NotNull(message = "Funding amount is required")
     private Double fundingAmount;
     @PastOrPresent(message = "Created date cannot be in the future")
-    private Date createdAt;
+    private LocalDate createdAt;
     @NotNull(message = "Project stage is required")
     private ProjectStage stage;
     @NotNull(message = "viewCount is required")
