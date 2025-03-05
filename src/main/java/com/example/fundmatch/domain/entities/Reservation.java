@@ -27,5 +27,5 @@ public class Reservation {
     @Temporal(TemporalType.TIMESTAMP)
     private Date reservationDate;
 
-    private ReservationStatus status; //  "CONFIRMED", "CANCELED"
+    private ReservationStatus status;
 }

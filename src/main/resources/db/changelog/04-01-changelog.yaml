@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1741128202129-10
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addColumn:
+            tableName: startups
+            columns:
+              - column:
+                  name: image_path
+                  type: VARCHAR(255)

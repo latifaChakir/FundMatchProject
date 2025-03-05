@@ -17,8 +17,11 @@ import com.example.fundmatch.shared.exception.StageNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -29,9 +32,15 @@ public class StartupServiceImpl implements StartupService {
     private final UserRepository userRepository;
     private final SectorRepository sectorRepository;
     private final StageRepository stageRepository;
+    private final FileStorageService fileStorageService;
+
 
     @Override
-    public StartupResponseVM saveStartup(CreateStartupRequestDto createStartupRequestDto) {
+    public StartupResponseVM saveStartup(CreateStartupRequestDto createStartupRequestDto, MultipartFile file) throws IOException {
+        if(file==null){
+            System.out.println("ok file canot be null");
+        }
+        String imagePath = (file != null) ? fileStorageService.saveFile(file) : null;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();
 
@@ -40,14 +49,14 @@ public class StartupServiceImpl implements StartupService {
         }
         CustomUserDetails userDetails = (CustomUserDetails) principal;
         Long userId = userDetails.getUserId();
-
         if (startupRepository.existsByCompanyName(createStartupRequestDto.getCompanyName())) {
             throw new DuplicateResourceException("Company name already exists.");
         }
         Startup startup = startupMapper.toEntity(createStartupRequestDto);
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         startup.setUser(user);
+        startup.setImagePath(imagePath);
         List<Sector> sectors = createStartupRequestDto.getSectors().stream()
                 .map(sector -> sectorRepository.findById(sector.getId())
                         .orElseThrow(() -> new SectorNotFoundException("Sector not found with ID: " + sector.getId())))
@@ -58,6 +67,7 @@ public class StartupServiceImpl implements StartupService {
                         .orElseThrow(() -> new StageNotFoundException("Stage not found with ID: " + stage.getId())))
                 .toList();
         startup.setSectors(sectors);
+        System.out.println(startup);
         Startup savedStartup = startupRepository.save(startup);
         return startupMapper.toDto(savedStartup);
     }

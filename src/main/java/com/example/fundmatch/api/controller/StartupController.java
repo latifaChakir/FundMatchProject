@@ -7,9 +7,12 @@ import com.example.fundmatch.service.interfaces.StartupService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -18,12 +21,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StartupController {
     private  final StartupService startupService;
-    @PostMapping("/save")
-    public ResponseEntity<ApiResponse<StartupResponseVM>> saveStartup(@Valid @RequestBody CreateStartupRequestDto startupRequest) {
-        StartupResponseVM response = startupService.saveStartup(startupRequest);
+    @PostMapping(value = "/save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponse<StartupResponseVM>> saveStartup(
+            @Valid @ModelAttribute CreateStartupRequestDto startupRequest,
+            @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
+        if (file == null) {
+            System.out.println("Le fichier est null.");
+        }
+        StartupResponseVM response = startupService.saveStartup(startupRequest, file);
         ApiResponse<StartupResponseVM> apiResponse = ApiResponse.success(response, "/api/startups/save");
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
     }
+
+
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<StartupResponseVM>> updateStartup(@PathVariable long id , @Valid @RequestBody CreateStartupRequestDto startupRequest) {
         StartupResponseVM response = startupService.updateStartup(startupRequest, id);
@@ -43,7 +53,7 @@ public class StartupController {
         ApiResponse<Void> apiResponse = ApiResponse.success(null, "/api/startups");
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(apiResponse);
     }
-    @GetMapping
+    @GetMapping("all")
     public ResponseEntity<ApiResponse<List<StartupResponseVM>>> getAllStartups() {
         List<StartupResponseVM> response = startupService.getStartups();
         ApiResponse<List<StartupResponseVM>> apiResponse = ApiResponse.success(response, "/api/startups");

@@ -11,6 +11,7 @@ import com.example.fundmatch.shared.exception.EventNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,7 +48,7 @@ public class EventServiceImpl implements EventService {
         Event existingEvent = optionalEvent.get();
         existingEvent.setTitle(eventRequest.getTitle());
         existingEvent.setDescription(eventRequest.getDescription());
-        existingEvent.setDate(java.sql.Date.valueOf(eventRequest.getDate()));
+        existingEvent.setDate(Date.valueOf(eventRequest.getDate()).toLocalDate());
         existingEvent.setLocation(eventRequest.getLocation());
         existingEvent.setCost(eventRequest.getCost());
         existingEvent.setType(EventType.valueOf(eventRequest.getType().name()));

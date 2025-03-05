@@ -34,6 +34,7 @@ public class Startup {
     private String description;
     private String pitchVideoUrl;
     private Double fundingNeeded;
+    private String imagePath;
 
     @ManyToMany
     @JoinTable(

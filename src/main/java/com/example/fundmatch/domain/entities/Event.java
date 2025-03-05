@@ -4,6 +4,7 @@ import com.example.fundmatch.domain.enums.EventType;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -21,8 +22,7 @@ public class Event {
     private String title;
     private String description;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date date;
+    private LocalDate date;
 
     private String location;
     private Double cost;
