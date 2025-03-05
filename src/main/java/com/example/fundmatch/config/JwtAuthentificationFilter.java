@@ -27,7 +27,8 @@ public class JwtAuthentificationFilter  extends OncePerRequestFilter {
             "/api/auth/login",
             "/api/auth/register",
             "/api/auth/reset-password",
-            "/api/startups/all"
+            "/api/startups/all",
+            "/api/startups/detail/id"
     );
 
     private boolean isPublicEndpoint(String servletPath) {

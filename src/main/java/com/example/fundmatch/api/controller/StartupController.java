@@ -41,7 +41,7 @@ public class StartupController {
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/detail/{id}")
     public ResponseEntity<ApiResponse<StartupResponseVM>> getStartup(@PathVariable long id) {
         StartupResponseVM response = startupService.getStartupById(id);
         ApiResponse<StartupResponseVM> apiResponse = ApiResponse.success(response, "/api/startups");

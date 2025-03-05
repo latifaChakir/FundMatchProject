@@ -1,10 +1,12 @@
 package com.example.fundmatch.domain.dtos.request.event;
 
+import com.example.fundmatch.domain.entities.Sector;
 import com.example.fundmatch.domain.enums.EventType;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
@@ -33,4 +35,7 @@ public class CreateEventRequestDto {
 
     @NotNull(message = "Maximum number of participants is required")
     private Integer maxParticipants;
+    private Sector sector;
+    private MultipartFile imagePath;
+
 }

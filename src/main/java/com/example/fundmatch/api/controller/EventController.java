@@ -7,9 +7,12 @@ import com.example.fundmatch.service.interfaces.EventService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -18,9 +21,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EventController{
     private final EventService eventService;
-    @PostMapping("/save")
-    public ResponseEntity<ApiResponse<EventResponseVM>> saveEvent(@Valid @RequestBody CreateEventRequestDto eventRequest) {
-        EventResponseVM response = eventService.saveEvent(eventRequest);
+    @PostMapping(value = "/save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponse<EventResponseVM>> saveEvent(
+            @Valid @ModelAttribute CreateEventRequestDto eventRequest , @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
+        EventResponseVM response = eventService.saveEvent(eventRequest, file);
         ApiResponse<EventResponseVM> apiResponse = ApiResponse.success(response, "/api/events/save");
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
     }

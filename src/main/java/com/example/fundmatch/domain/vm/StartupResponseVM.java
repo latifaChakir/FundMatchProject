@@ -24,6 +24,7 @@ public class StartupResponseVM {
     private Double growthRate;
     private String headquarters;
     private String contactInfo;
+    private String imagePath;
     private List<Sector> sectors;
     private List<Stage> stages;
 }

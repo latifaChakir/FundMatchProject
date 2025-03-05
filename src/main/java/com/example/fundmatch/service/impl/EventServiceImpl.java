@@ -10,7 +10,9 @@ import com.example.fundmatch.service.interfaces.EventService;
 import com.example.fundmatch.shared.exception.EventNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
@@ -20,11 +22,15 @@ import java.util.Optional;
 public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
+    private final FileStorageService fileStorageService;
+
 
     @Override
-    public EventResponseVM saveEvent(CreateEventRequestDto eventRequest) {
+    public EventResponseVM saveEvent(CreateEventRequestDto eventRequest, MultipartFile file) throws IOException{
+        String imagePath = (file != null) ? fileStorageService.saveFile(file) : null;
         System.out.println(eventRequest);
         Event event = eventMapper.toEntity(eventRequest);
+        event.setImagePath(imagePath);
         Event savedEvent = eventRepository.save(event);
         return eventMapper.toDto(savedEvent);
     }

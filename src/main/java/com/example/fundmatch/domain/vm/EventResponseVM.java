@@ -1,4 +1,5 @@
 package com.example.fundmatch.domain.vm;
+import com.example.fundmatch.domain.entities.Sector;
 import com.example.fundmatch.domain.enums.EventType;
 import lombok.*;
 
@@ -19,4 +20,6 @@ public class EventResponseVM {
     private Double cost;
     private EventType type;
     private Integer maxParticipants;
+    private String imagePath;
+    private Sector sector;
 }

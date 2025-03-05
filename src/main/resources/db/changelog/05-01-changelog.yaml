@@ -1,0 +1,31 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1741128202129-10
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addColumn:
+            tableName: events
+            columns:
+              - column:
+                  name: sector_id
+                  type: BIGINT
+                  constraints:
+                    nullable: true
+              - column:
+                  name: image_path
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+  - changeSet:
+      id: 1741214904695-2
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: sector_id
+            baseTableName: events
+            constraintName: FK_EVENTS_ON_SECTOR
+            referencedColumnNames: id
+            referencedTableName: sectors
+            onDelete: CASCADE

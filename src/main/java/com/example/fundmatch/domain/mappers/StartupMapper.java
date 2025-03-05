@@ -21,6 +21,7 @@ public interface StartupMapper {
 
     @Mapping(source = "stages", target = "stages")
     @Mapping(source = "sectors", target = "sectors")
+    @Mapping(source = "imagePath", target = "imagePath", qualifiedByName = "mapImagePathFromEntity")
     StartupResponseVM toDto(Startup entity);
 
     List<StartupResponseVM> toDtoList(List<Startup> startups);
@@ -29,4 +30,11 @@ public interface StartupMapper {
     default String mapImagePath(MultipartFile file) {
         return file != null ? file.getOriginalFilename() : null;
     }
+
+    @Named("mapImagePathFromEntity")
+    default String mapImagePathFromEntity(String imagePath) {
+        return imagePath != null ? "http://localhost:9091/api/files/" + imagePath : null;
+    }
 }
+
+
