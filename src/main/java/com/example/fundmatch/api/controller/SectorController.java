@@ -43,7 +43,7 @@ public class SectorController {
         ApiResponse<Void> apiResponse = ApiResponse.success(null, "/api/sectors");
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(apiResponse);
     }
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<ApiResponse<List<SectorResponseVM>>> getAllSectors() {
         List<SectorResponseVM> response = sectorService.getSectors();
         ApiResponse<List<SectorResponseVM>> apiResponse = ApiResponse.success(response, "/api/sectors");

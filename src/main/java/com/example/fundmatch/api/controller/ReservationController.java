@@ -10,20 +10,25 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/Reservations")
+@RequestMapping("/api/reservations")
 @CrossOrigin(origins = "http://localhost:4200")
 @RequiredArgsConstructor
 public class ReservationController {
     private final ReservationService reservationService;
     @PostMapping("/save")
-    public ResponseEntity<ApiResponse<ReservationResponseVM>> saveReservation(@Valid @RequestBody CreateReservationRequestDto reservationRequest) {
-        ReservationResponseVM response = reservationService.saveReservation(reservationRequest);
+    public ResponseEntity<ApiResponse<ReservationResponseVM>> saveReservation(
+            @Valid @RequestBody CreateReservationRequestDto reservationRequest,
+            Principal principal) {
+        ReservationResponseVM response = reservationService.saveReservation(reservationRequest, principal);
         ApiResponse<ReservationResponseVM> apiResponse = ApiResponse.success(response, "/api/reservations/save");
+
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
     }
+
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<ReservationResponseVM>> updateReservation(@PathVariable long id , @Valid @RequestBody CreateReservationRequestDto reservationRequest) {
         ReservationResponseVM response = reservationService.updateReservation(reservationRequest, id);

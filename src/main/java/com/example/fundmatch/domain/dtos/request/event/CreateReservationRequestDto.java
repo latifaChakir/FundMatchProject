@@ -9,9 +9,6 @@ import lombok.*;
 @Setter
 @Builder
 public class CreateReservationRequestDto {
-    @NotNull(message = "User ID is required")
-    private Long userId;
-
     @NotNull(message = "Event ID is required")
     private Long eventId;
 }

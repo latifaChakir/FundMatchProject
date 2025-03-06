@@ -11,9 +11,9 @@ import lombok.*;
 @Setter
 @Builder
 public class ReservationResponseVM {
-    private Long reservationId;
-    private Event event;
-    private User user;
+    private Long id;
+    private EventResponseVM event;
+    private UserResponseVM user;
     private ReservationStatus status;
     private String reservationDate;
 }

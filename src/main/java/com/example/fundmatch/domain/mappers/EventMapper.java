@@ -6,15 +6,21 @@ import com.example.fundmatch.domain.vm.EventResponseVM;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
+import org.mapstruct.factory.Mappers;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface EventMapper {
+    EventMapper INSTANCE = Mappers.getMapper(EventMapper.class);
+
     @Mapping(source = "imagePath", target = "imagePath", qualifiedByName = "mapImagePath")
     Event toEntity(CreateEventRequestDto dto);
+
+    @Mapping(source = "imagePath", target = "imagePath", qualifiedByName = "mapImagePathFromEntity")
     EventResponseVM toDto(Event event);
+
     List<EventResponseVM> toDtoList(List<Event> events);
 
     @Named("mapImagePath")
@@ -27,4 +33,3 @@ public interface EventMapper {
         return imagePath != null ? "http://localhost:9091/api/files/" + imagePath : null;
     }
 }
-

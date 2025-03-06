@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 
@@ -29,13 +30,12 @@ public class ReservationServiceImpl implements ReservationService {
     private final ReservationMapper reservationMapper;
 
     @Override
-    public ReservationResponseVM saveReservation(CreateReservationRequestDto requestDto) {
+    public ReservationResponseVM saveReservation(CreateReservationRequestDto requestDto, Principal principal) {
         Event event = eventRepository.findById(requestDto.getEventId())
                 .orElseThrow(() -> new EventNotFoundException("Event not found"));
 
-        User user = userRepository.findById(requestDto.getUserId())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
+        User user = userRepository.findByEmail(principal.getName())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found."));
         if (reservationRepository.countByEventId(event.getId()) >= event.getMaxParticipants()) {
             throw new ReservationLimitExceededException("Event is fully booked.");
         }

@@ -28,6 +28,8 @@ public class JwtAuthentificationFilter  extends OncePerRequestFilter {
             "/api/auth/register",
             "/api/auth/reset-password",
             "/api/startups/all",
+            "/api/events/all",
+            "/api/sectors/all",
             "/api/startups/detail/id"
     );
 

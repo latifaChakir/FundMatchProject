@@ -47,7 +47,7 @@ public class EventController{
         ApiResponse<Void> apiResponse = ApiResponse.success(null, "/api/events");
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(apiResponse);
     }
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<ApiResponse<List<EventResponseVM>>> getAllEvents() {
         List<EventResponseVM> response = eventService.getEvents();
         ApiResponse<List<EventResponseVM>> apiResponse = ApiResponse.success(response, "/api/events");
