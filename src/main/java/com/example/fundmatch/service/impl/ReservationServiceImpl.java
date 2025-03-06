@@ -12,7 +12,9 @@ import com.example.fundmatch.repository.ReservationRepository;
 import com.example.fundmatch.repository.UserRepository;
 import com.example.fundmatch.service.interfaces.ReservationService;
 import com.example.fundmatch.shared.exception.EventNotFoundException;
+import com.example.fundmatch.shared.exception.PaymentException;
 import com.example.fundmatch.shared.exception.ReservationLimitExceededException;
+import com.stripe.model.Charge;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,7 @@ public class ReservationServiceImpl implements ReservationService {
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
     private final ReservationMapper reservationMapper;
+    private final PaymentService paymentService;
 
     @Override
     public ReservationResponseVM saveReservation(CreateReservationRequestDto requestDto, Principal principal) {
@@ -45,6 +48,12 @@ public class ReservationServiceImpl implements ReservationService {
         reservation.setEvent(event);
         reservation.setReservationDate(new Date());
         reservation.setStatus(ReservationStatus.ATTEMPTED);
+        try {
+            Charge charge = paymentService.createCharge(requestDto.getPaymentToken(), event.getCost());
+            reservation.setStatus(ReservationStatus.CONFIRMED);
+        } catch (Exception e) {
+            throw new PaymentException("Payment failed: " + e.getMessage());
+        }
 
         Reservation savedReservation = reservationRepository.save(reservation);
         return reservationMapper.toDto(savedReservation);
