@@ -30,12 +30,16 @@ public class Event {
     private EventType type;
 
     private Integer maxParticipants;
+    private Integer availableSpots;
 
     @ManyToOne
     @JoinColumn(name = "sector_id", nullable = true)
     private Sector sector;
     private String imagePath;
 
-
+    @PrePersist
+    public void initAvailableSpots() {
+        this.availableSpots = this.maxParticipants;
+    }
 }
 

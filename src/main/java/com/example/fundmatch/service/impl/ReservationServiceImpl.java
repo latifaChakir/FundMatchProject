@@ -39,7 +39,8 @@ public class ReservationServiceImpl implements ReservationService {
 
         User user = userRepository.findByEmail(principal.getName())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found."));
-        if (reservationRepository.countByEventId(event.getId()) >= event.getMaxParticipants()) {
+
+        if (event.getAvailableSpots() <= 0) {
             throw new ReservationLimitExceededException("Event is fully booked.");
         }
 
@@ -48,9 +49,12 @@ public class ReservationServiceImpl implements ReservationService {
         reservation.setEvent(event);
         reservation.setReservationDate(new Date());
         reservation.setStatus(ReservationStatus.ATTEMPTED);
+
         try {
             Charge charge = paymentService.createCharge(requestDto.getPaymentToken(), event.getCost());
             reservation.setStatus(ReservationStatus.CONFIRMED);
+            event.setAvailableSpots(event.getAvailableSpots() - 1);
+            eventRepository.save(event);
         } catch (Exception e) {
             throw new PaymentException("Payment failed: " + e.getMessage());
         }
