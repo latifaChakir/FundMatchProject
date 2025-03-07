@@ -31,7 +31,7 @@ public class ReservationServiceImpl implements ReservationService {
     private final UserRepository userRepository;
     private final ReservationMapper reservationMapper;
     private final PaymentService paymentService;
-
+    private final TicketEmailService emailService;
     @Override
     public ReservationResponseVM saveReservation(CreateReservationRequestDto requestDto, Principal principal) {
         Event event = eventRepository.findById(requestDto.getEventId())
@@ -55,6 +55,7 @@ public class ReservationServiceImpl implements ReservationService {
             reservation.setStatus(ReservationStatus.CONFIRMED);
             event.setAvailableSpots(event.getAvailableSpots() - 1);
             eventRepository.save(event);
+            emailService.sendTicketEmail(user, event);
         } catch (Exception e) {
             throw new PaymentException("Payment failed: " + e.getMessage());
         }

@@ -104,10 +104,15 @@
         <dependency>
             <groupId>com.stripe</groupId>
             <artifactId>stripe-java</artifactId>
-            <version>20.120.0</version> <!-- Utilisez la dernière version disponible -->
+            <version>20.120.0</version>
         </dependency>
-
-
+        <!-- https://mvnrepository.com/artifact/com.itextpdf/itext7-core -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itext7-core</artifactId>
+            <version>9.1.0</version>
+            <type>pom</type>
+        </dependency>
 
         <!-- Test Dependencies -->
         <dependency>
