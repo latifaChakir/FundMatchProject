@@ -38,14 +38,11 @@ public class PdfGenerator {
             PdfFont boldFont = PdfFontFactory.createFont("Helvetica-Bold");
             PdfFont regularFont = PdfFontFactory.createFont("Helvetica");
 
-            // Créer une mise en page en deux colonnes
             Table mainLayout = new Table(2).useAllAvailableWidth();
 
-            // Colonne de gauche - Informations du billet
             Cell leftCell = new Cell().setBorder(new SolidBorder(ColorConstants.BLACK, 1));
             Table infoTable = new Table(1).useAllAvailableWidth();
 
-            // Titre de l'événement
             Paragraph title = new Paragraph("🎟️ " + event.getTitle())
                     .setFont(boldFont)
                     .setFontSize(18)
