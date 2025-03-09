@@ -7,10 +7,13 @@ import com.example.fundmatch.domain.mappers.MessageMapper;
 import com.example.fundmatch.domain.vm.MessageResponseVM;
 import com.example.fundmatch.repository.MessageRepository;
 import com.example.fundmatch.repository.UserRepository;
+import com.example.fundmatch.security.JwtService;
 import com.example.fundmatch.service.interfaces.MessageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -23,16 +26,20 @@ public class MessageServiceImpl implements MessageService {
     private final MessageRepository messageRepository;
     private final UserRepository userRepository;
     private final MessageMapper messageMapper;
+    private final JwtService jwtService;
+    private final UserDetailsService userDetailsService;
 
     @Override
-    public MessageResponseVM sendMessage(MessageRequest messageRequest) {
-        System.out.println("ayih ayih");
-        String username = getAuthenticatedUsername();
-        User sender = userRepository.findByEmail(username)
-                .orElseThrow(() -> new RuntimeException("Sender not found"));
+    public MessageResponseVM sendMessage(MessageRequest messageRequest, StompHeaderAccessor accessor) {
+        UserDetails user = getAuthenticatedUser(accessor);
+        if (user == null) {
+            throw new RuntimeException("Utilisateur non authentifié !");
+        }
+
+        User sender = userRepository.findByEmail(user.getUsername())
+                .orElseThrow(() -> new RuntimeException("Expéditeur non trouvé"));
         User receiver = userRepository.findById(messageRequest.getReceiverId())
-                .orElseThrow(() -> new RuntimeException("Receiver not found"));
-        System.out.println("Traitement du message : " + messageRequest);
+                .orElseThrow(() -> new RuntimeException("Destinataire non trouvé"));
 
         Message message = new Message();
         message.setSender(sender);
@@ -45,7 +52,6 @@ public class MessageServiceImpl implements MessageService {
         Message savedMessage = messageRepository.save(message);
         return messageMapper.toDto(savedMessage);
     }
-
     @Override
     public MessageResponseVM getMessageById(Long id) {
         Optional<Message> message = messageRepository.findById(id);
@@ -57,22 +63,24 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public List<MessageResponseVM> getMessagesBySender() {
-        String username = getAuthenticatedUsername();
-        User sender = userRepository.findByEmail(username)
-                .orElseThrow(() -> new RuntimeException("Sender not found"));
-
-        List<Message> messages = messageRepository.findBySenderIdOrderByTimestampDesc(sender.getId());
-        return messageMapper.toDtoList(messages);
+//        String username = getAuthenticatedUsername();
+//        User sender = userRepository.findByEmail(username)
+//                .orElseThrow(() -> new RuntimeException("Sender not found"));
+//
+//        List<Message> messages = messageRepository.findBySenderIdOrderByTimestampDesc(sender.getId());
+//        return messageMapper.toDtoList(messages);
+        return List.of();
     }
 
     @Override
     public List<MessageResponseVM> getMessagesByReceiver() {
-        String username = getAuthenticatedUsername();
-        User receiver = userRepository.findByEmail(username)
-                .orElseThrow(() -> new RuntimeException("Receiver not found"));
-
-        List<Message> messages = messageRepository.findByReceiverIdOrderByTimestampDesc(receiver.getId());
-        return messageMapper.toDtoList(messages);
+//        String username = getAuthenticatedUsername();
+//        User receiver = userRepository.findByEmail(username)
+//                .orElseThrow(() -> new RuntimeException("Receiver not found"));
+//
+//        List<Message> messages = messageRepository.findByReceiverIdOrderByTimestampDesc(receiver.getId());
+//        return messageMapper.toDtoList(messages);
+        return List.of();
     }
 
     @Override
@@ -97,12 +105,37 @@ public class MessageServiceImpl implements MessageService {
         messageRepository.delete(message.get());
     }
 
-    private String getAuthenticatedUsername() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            return ((UserDetails) principal).getUsername();
-        } else {
-            return principal.toString();
+    public UserDetails getAuthenticatedUser(StompHeaderAccessor accessor) {
+        // Try to get from Security Context first (most reliable)
+        if (SecurityContextHolder.getContext().getAuthentication() != null &&
+                SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserDetails) {
+            return (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         }
+
+        // Fallback to header extraction
+        List<String> authHeader = accessor.getNativeHeader("Authorization");
+        if (authHeader != null && !authHeader.isEmpty()) {
+            String token = authHeader.get(0);
+            if (token != null && token.startsWith("Bearer ")) {
+                String jwt = token.substring(7);
+                try {
+                    String username = jwtService.extractEmail(jwt);
+                    if (username != null) {
+                        return userDetailsService.loadUserByUsername(username);
+                    }
+                } catch (Exception e) {
+                    System.out.println("Error extracting user from JWT: " + e.getMessage());
+                }
+            }
+        }
+
+        // Check if user is directly in accessor
+        if (accessor.getUser() != null && accessor.getUser().getName() != null) {
+            return userDetailsService.loadUserByUsername(accessor.getUser().getName());
+        }
+
+        System.out.println("No authenticated user found in request");
+        return null;
     }
+
 }

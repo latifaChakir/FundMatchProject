@@ -6,6 +6,7 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.util.HtmlUtils;
 
@@ -23,10 +24,10 @@ public class MessageController {
     private final SimpMessagingTemplate messagingTemplate;
 
     @MessageMapping("/app/sendMessage")
-    public void sendMessage(@Payload MessageRequest messageRequest) {
+    public void sendMessage(@Payload MessageRequest messageRequest, StompHeaderAccessor accessor) {
         System.out.println("salam");
         messageRequest.setContent(HtmlUtils.htmlEscape(messageRequest.getContent()));
-        MessageResponseVM response = messageService.sendMessage(messageRequest);
+        MessageResponseVM response = messageService.sendMessage(messageRequest, accessor);
         String destination = "/user/" + messageRequest.getReceiverId() + "/queue/messages";
         messagingTemplate.convertAndSendToUser(messageRequest.getReceiverId().toString(), "/queue/messages", response);
         System.out.println("Message envoyé à l'utilisateur ID: " + messageRequest.getReceiverId());
