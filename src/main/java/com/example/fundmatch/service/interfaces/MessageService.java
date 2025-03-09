@@ -11,6 +11,6 @@ public interface MessageService {
     MessageResponseVM getMessageById(Long id);
     List<MessageResponseVM> getMessagesBySender();
     List<MessageResponseVM> getMessagesByReceiver();
-    void markMessageAsRead(Long id);
+    MessageResponseVM markMessageAsRead(Long id);
     void deleteMessage(Long id);
 }

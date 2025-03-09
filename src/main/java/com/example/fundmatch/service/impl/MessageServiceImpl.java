@@ -26,11 +26,13 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public MessageResponseVM sendMessage(MessageRequest messageRequest) {
+        System.out.println("ayih ayih");
         String username = getAuthenticatedUsername();
         User sender = userRepository.findByEmail(username)
                 .orElseThrow(() -> new RuntimeException("Sender not found"));
         User receiver = userRepository.findById(messageRequest.getReceiverId())
                 .orElseThrow(() -> new RuntimeException("Receiver not found"));
+        System.out.println("Traitement du message : " + messageRequest);
 
         Message message = new Message();
         message.setSender(sender);
@@ -73,14 +75,14 @@ public class MessageServiceImpl implements MessageService {
         return messageMapper.toDtoList(messages);
     }
 
-
     @Override
-    public void markMessageAsRead(Long id) {
+    public MessageResponseVM markMessageAsRead(Long id) {
         Optional<Message> optionalMessage = messageRepository.findById(id);
         if (optionalMessage.isPresent()) {
             Message message = optionalMessage.get();
             message.setIsRead(true);
             messageRepository.save(message);
+            return messageMapper.toDto(message); // Return the updated message
         } else {
             throw new RuntimeException("Message not found");
         }
