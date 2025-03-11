@@ -149,7 +149,7 @@ public class MessageServiceImpl implements MessageService {
         allMessages.addAll(sentMessages);
         allMessages.addAll(receivedMessages);
 
-        // Trier par date (ordre descendant)
+        // Trier par date (ordre Descendant)
         allMessages.sort(Comparator.comparing(Message::getTimestamp).reversed());
 
         return messageMapper.toDtoList(allMessages);
@@ -167,8 +167,8 @@ public class MessageServiceImpl implements MessageService {
         allMessages.addAll(sentMessages);
         allMessages.addAll(receivedMessages);
 
-        // Sort by date (descending order)
-        allMessages.sort(Comparator.comparing(Message::getTimestamp).reversed());
+        // Sort by date (Descending order)
+        allMessages.sort(Comparator.comparing(Message::getTimestamp));
 
         return messageMapper.toDtoList(allMessages);
     }
