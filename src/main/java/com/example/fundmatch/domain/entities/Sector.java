@@ -19,9 +19,9 @@ public class Sector {
     @Column(nullable = false, unique = true)
     private String name;
 
-//    @ManyToMany(mappedBy = "sectors", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private List<Startup> startups;
-//
-//    @ManyToMany(mappedBy = "sectors", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private List<Investor> investors;
+    @ManyToMany(mappedBy = "sectors", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Startup> startups;
+
+    @ManyToMany(mappedBy = "sectors", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Investor> investors;
 }
