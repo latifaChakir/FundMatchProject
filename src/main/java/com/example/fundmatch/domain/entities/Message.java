@@ -1,5 +1,6 @@
 package com.example.fundmatch.domain.entities;
 
+import com.example.fundmatch.domain.enums.MessageStatus;
 import com.example.fundmatch.domain.enums.MessageType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -34,5 +35,9 @@ public class Message {
 
     @Enumerated(EnumType.STRING)
     private MessageType type;
+
+    @Enumerated(EnumType.STRING)
+    private MessageStatus status;
+
 }
 

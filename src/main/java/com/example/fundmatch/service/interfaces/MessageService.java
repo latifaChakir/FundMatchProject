@@ -10,8 +10,11 @@ public interface MessageService {
     MessageResponseVM sendMessage(MessageRequest messageRequest, StompHeaderAccessor accessor);
 
     MessageResponseVM getMessageById(Long id);
-    List<MessageResponseVM> getMessagesBySender();
-    List<MessageResponseVM> getMessagesByReceiver();
+    List<MessageResponseVM> getMessagesBySender(Long id);
+    List<MessageResponseVM> getMessagesByReceiver(Long id);
     MessageResponseVM markMessageAsRead(Long id);
     void deleteMessage(Long id);
+    List<MessageResponseVM> getUserMessages(StompHeaderAccessor accessor);
+    List<MessageResponseVM> getUserMessagesByUserId(Long userId);
+
 }

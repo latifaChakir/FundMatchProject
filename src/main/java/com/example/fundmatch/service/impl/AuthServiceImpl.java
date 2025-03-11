@@ -99,6 +99,7 @@ public class AuthServiceImpl implements AuthService {
 
         return new TokenResponseVM(newAccessToken, refreshToken , role , firstname , lastname);
     }
+    @Override
     public User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();

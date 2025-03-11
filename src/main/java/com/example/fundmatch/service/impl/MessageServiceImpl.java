@@ -16,9 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -62,25 +60,21 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<MessageResponseVM> getMessagesBySender() {
-//        String username = getAuthenticatedUsername();
-//        User sender = userRepository.findByEmail(username)
-//                .orElseThrow(() -> new RuntimeException("Sender not found"));
-//
-//        List<Message> messages = messageRepository.findBySenderIdOrderByTimestampDesc(sender.getId());
-//        return messageMapper.toDtoList(messages);
-        return List.of();
+    public List<MessageResponseVM> getMessagesBySender(Long id) {
+        User sender = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Sender not found"));
+
+        List<Message> messages = messageRepository.findBySenderIdOrderByTimestampDesc(sender.getId());
+        return messageMapper.toDtoList(messages);
     }
 
     @Override
-    public List<MessageResponseVM> getMessagesByReceiver() {
-//        String username = getAuthenticatedUsername();
-//        User receiver = userRepository.findByEmail(username)
-//                .orElseThrow(() -> new RuntimeException("Receiver not found"));
-//
-//        List<Message> messages = messageRepository.findByReceiverIdOrderByTimestampDesc(receiver.getId());
-//        return messageMapper.toDtoList(messages);
-        return List.of();
+    public List<MessageResponseVM> getMessagesByReceiver(Long id) {
+        User receiver = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Receiver not found"));
+
+        List<Message> messages = messageRepository.findByReceiverIdOrderByTimestampDesc(receiver.getId());
+        return messageMapper.toDtoList(messages);
     }
 
     @Override
@@ -137,5 +131,47 @@ public class MessageServiceImpl implements MessageService {
         System.out.println("No authenticated user found in request");
         return null;
     }
+    @Override
+    public List<MessageResponseVM> getUserMessages(StompHeaderAccessor accessor) {
+        System.out.println("Allah alllah ");
+        UserDetails user = getAuthenticatedUser(accessor);
+        if (user == null) {
+            throw new RuntimeException("Utilisateur non authentifié !");
+        }
+
+        User authenticatedUser = userRepository.findByEmail(user.getUsername())
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+
+        List<Message> sentMessages = messageRepository.findBySenderIdOrderByTimestampDesc(authenticatedUser.getId());
+        List<Message> receivedMessages = messageRepository.findByReceiverIdOrderByTimestampDesc(authenticatedUser.getId());
+        System.out.println("sentMessages"+sentMessages);
+        List<Message> allMessages = new ArrayList<>();
+        allMessages.addAll(sentMessages);
+        allMessages.addAll(receivedMessages);
+
+        // Trier par date (ordre descendant)
+        allMessages.sort(Comparator.comparing(Message::getTimestamp).reversed());
+
+        return messageMapper.toDtoList(allMessages);
+    }
+
+    @Override
+    public List<MessageResponseVM> getUserMessagesByUserId(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        List<Message> sentMessages = messageRepository.findBySenderIdOrderByTimestampDesc(userId);
+        List<Message> receivedMessages = messageRepository.findByReceiverIdOrderByTimestampDesc(userId);
+
+        List<Message> allMessages = new ArrayList<>();
+        allMessages.addAll(sentMessages);
+        allMessages.addAll(receivedMessages);
+
+        // Sort by date (descending order)
+        allMessages.sort(Comparator.comparing(Message::getTimestamp).reversed());
+
+        return messageMapper.toDtoList(allMessages);
+    }
+
 
 }

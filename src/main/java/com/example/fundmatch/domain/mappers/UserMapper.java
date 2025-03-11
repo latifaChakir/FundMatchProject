@@ -36,5 +36,7 @@ public interface UserMapper {
         role.setId((long) Math.toIntExact(roleId));
         return role;
     }
+
+    List<UserResponseVM> toDtoList(List<User> users);
 }
 
