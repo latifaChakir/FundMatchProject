@@ -26,6 +26,7 @@ public class MessageServiceImpl implements MessageService {
     private final MessageMapper messageMapper;
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final NotificationMessageService notificationMessageService;
 
     @Override
     public MessageResponseVM sendMessage(MessageRequest messageRequest, StompHeaderAccessor accessor) {
@@ -48,6 +49,9 @@ public class MessageServiceImpl implements MessageService {
         message.setType(messageRequest.getType());
 
         Message savedMessage = messageRepository.save(message);
+        notificationMessageService.sendMessageNotification(
+                "Message from " + sender.getFirstName() + " to " + receiver.getFirstName() + ": " + message.getContent()
+        );
         return messageMapper.toDto(savedMessage);
     }
     @Override
