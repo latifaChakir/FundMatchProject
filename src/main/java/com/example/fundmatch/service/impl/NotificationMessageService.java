@@ -13,6 +13,6 @@ public class NotificationMessageService {
 
     public void sendMessageNotification(String message) {
         System.out.println("getEventPublishedNotification");
-        messagingTemplate.convertAndSend("/topic/messages", "New Message: " + message);
+        messagingTemplate.convertAndSend("/topic/messages", message);
     }
 }

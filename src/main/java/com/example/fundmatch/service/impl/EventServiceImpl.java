@@ -95,7 +95,7 @@ public class EventServiceImpl implements EventService {
         Event event = eventOptional.get();
         event.setIsPublished(true);
         eventRepository.save(event);
-        webSocketNotificationService.sendEventPublishedNotification(event.getId().toString());
+        webSocketNotificationService.sendEventPublishedNotification(event.getTitle());
         return eventMapper.toDto(event);
     }
 }

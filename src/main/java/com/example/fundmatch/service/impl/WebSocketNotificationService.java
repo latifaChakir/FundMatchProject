@@ -11,9 +11,9 @@ public class WebSocketNotificationService {
         this.messagingTemplate = messagingTemplate;
     }
 
-    public void sendEventPublishedNotification(String eventId) {
+    public void sendEventPublishedNotification(String eventTitle) {
         System.out.println("getEventPublishedNotification");
-        messagingTemplate.convertAndSend("/topic/events", "Event published: " + eventId);
+        messagingTemplate.convertAndSend("/topic/events", "Event published: " + eventTitle);
     }
 }
 
