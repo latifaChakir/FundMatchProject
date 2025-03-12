@@ -21,5 +21,6 @@ public class EventResponseVM {
     private EventType type;
     private Integer maxParticipants;
     private String imagePath;
-    private Sector sector;
+    private SectorResponseVM sector;
+    private Boolean isPublished;
 }

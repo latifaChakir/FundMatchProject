@@ -1,5 +1,6 @@
 package com.example.fundmatch.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,6 +21,7 @@ public class Sector {
     private String name;
 
     @ManyToMany(mappedBy = "sectors", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Startup> startups;
 
     @ManyToMany(mappedBy = "sectors", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

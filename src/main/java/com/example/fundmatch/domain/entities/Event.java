@@ -32,6 +32,10 @@ public class Event {
     private Integer maxParticipants;
     private Integer availableSpots;
 
+    @Column(name = "is_published", nullable = true)
+    private Boolean  isPublished;
+
+
     @ManyToOne
     @JoinColumn(name = "sector_id", nullable = true)
     private Sector sector;

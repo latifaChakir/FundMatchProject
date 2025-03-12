@@ -25,6 +25,6 @@ public class StartupResponseVM {
     private String headquarters;
     private String contactInfo;
     private String imagePath;
-    private List<Sector> sectors;
-    private List<Stage> stages;
+    private List<SectorResponseVM> sectors;
+    private List<StageResponseVM> stages;
 }

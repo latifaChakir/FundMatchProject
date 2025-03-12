@@ -31,6 +31,7 @@ public class EventServiceImpl implements EventService {
         System.out.println(eventRequest);
         Event event = eventMapper.toEntity(eventRequest);
         event.setImagePath(imagePath);
+        event.setIsPublished(false);
         Event savedEvent = eventRepository.save(event);
         return eventMapper.toDto(savedEvent);
     }
@@ -75,7 +76,24 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<EventResponseVM> getEvents() {
+        List<Event> events = eventRepository.findPublishedEvents();
+        return eventMapper.toDtoList(events);
+    }
+
+    @Override
+    public List<EventResponseVM> getEventsToAccepte() {
         List<Event> events = eventRepository.findAll();
         return eventMapper.toDtoList(events);
+    }
+    @Override
+    public EventResponseVM updateStatus(Long EventId){
+        Optional<Event> eventOptional = eventRepository.findById(EventId);
+        if (eventOptional.isEmpty()) {
+            throw new EventNotFoundException("event introuvable");
+        }
+        Event event = eventOptional.get();
+        event.setIsPublished(true);
+        eventRepository.save(event);
+        return eventMapper.toDto(event);
     }
 }

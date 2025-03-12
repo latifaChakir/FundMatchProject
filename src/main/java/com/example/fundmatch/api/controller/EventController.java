@@ -47,10 +47,23 @@ public class EventController{
         ApiResponse<Void> apiResponse = ApiResponse.success(null, "/api/events");
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(apiResponse);
     }
-    @GetMapping("/all")
+    @GetMapping("/publishedEvents")
     public ResponseEntity<ApiResponse<List<EventResponseVM>>> getAllEvents() {
         List<EventResponseVM> response = eventService.getEvents();
         ApiResponse<List<EventResponseVM>> apiResponse = ApiResponse.success(response, "/api/events");
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<ApiResponse<List<EventResponseVM>>> getAllEventsToAccepte() {
+        List<EventResponseVM> response = eventService.getEventsToAccepte();
+        ApiResponse<List<EventResponseVM>> apiResponse = ApiResponse.success(response, "/api/events");
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+    @GetMapping("/updateStatus/{id}")
+    public ResponseEntity<ApiResponse<EventResponseVM>> updateStatus(@PathVariable long id) {
+        EventResponseVM response = eventService.updateStatus(id);
+        ApiResponse<EventResponseVM> apiResponse = ApiResponse.success(response, "/api/Events");
+        return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
     }
 }

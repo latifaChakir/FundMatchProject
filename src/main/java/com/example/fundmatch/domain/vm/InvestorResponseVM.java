@@ -13,7 +13,7 @@ import java.util.List;
 public class InvestorResponseVM {
     private Long id;
     private String organization;
-    private List<Sector> sectors;
+    private List<SectorResponseVM> sectors;
     private Double minInvestment;
     private Double maxInvestment;
     private String investmentType;

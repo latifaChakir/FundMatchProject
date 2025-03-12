@@ -13,5 +13,7 @@ public interface EventService{
     EventResponseVM updateEvent(CreateEventRequestDto eventRequest, Long id);
     void deleteEvent(Long id);
     List<EventResponseVM> getEvents();
+    List<EventResponseVM> getEventsToAccepte();
 
+    EventResponseVM updateStatus(Long EventId);
 }
