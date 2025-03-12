@@ -100,7 +100,7 @@ public class AuthServiceImpl implements AuthService {
         return new TokenResponseVM(newAccessToken, refreshToken , role , firstname , lastname);
     }
     @Override
-    public User getAuthenticatedUser() {
+    public AuthResponseVM getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();
         if (!(principal instanceof CustomUserDetails)) {
@@ -108,8 +108,9 @@ public class AuthServiceImpl implements AuthService {
         }
         CustomUserDetails userDetails = (CustomUserDetails) principal;
         Long userId = userDetails.getUserId();
-        return userRepository.findById(userId)
+        User user=userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
+        return userMapper.toDto(user);
     }
 
     @Override

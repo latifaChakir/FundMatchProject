@@ -6,6 +6,7 @@ import com.example.fundmatch.domain.entities.Startup;
 import com.example.fundmatch.domain.entities.User;
 import com.example.fundmatch.domain.enums.ProjectStatus;
 import com.example.fundmatch.domain.mappers.ProjectMapper;
+import com.example.fundmatch.domain.vm.AuthResponseVM;
 import com.example.fundmatch.domain.vm.ProjectResponseVM;
 import com.example.fundmatch.repository.ProjectRepository;
 import com.example.fundmatch.repository.StartupRepository;
@@ -29,7 +30,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectResponseVM saveProject(CreateProjectRequestDto projectRequest) {
-        User currentUser = authService.getAuthenticatedUser();
+        AuthResponseVM currentUser = authService.getAuthenticatedUser();
         System.out.println(currentUser);
         Startup startup = startupRepository.findByUserId(currentUser.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("No startup associated with the current user."));

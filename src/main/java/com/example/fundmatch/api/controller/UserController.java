@@ -2,6 +2,7 @@ package com.example.fundmatch.api.controller;
 
 import com.example.fundmatch.api.wrapper.ApiResponse;
 import com.example.fundmatch.domain.entities.User;
+import com.example.fundmatch.domain.vm.AuthResponseVM;
 import com.example.fundmatch.domain.vm.UserResponseVM;
 import com.example.fundmatch.service.interfaces.AuthService;
 import com.example.fundmatch.service.interfaces.UserService;
@@ -29,7 +30,7 @@ public class UserController{
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
     @GetMapping("/me")
-    public User me(){
+    public AuthResponseVM me(){
         return authService.getAuthenticatedUser();
     }
 }

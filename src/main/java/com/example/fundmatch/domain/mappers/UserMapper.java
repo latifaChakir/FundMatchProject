@@ -38,5 +38,6 @@ public interface UserMapper {
     }
 
     List<UserResponseVM> toDtoList(List<User> users);
+    List<UserResponseVM> toDtoList(Set<User> users);
 }
 
