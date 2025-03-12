@@ -23,6 +23,7 @@ public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
     private final FileStorageService fileStorageService;
+    private final WebSocketNotificationService webSocketNotificationService;
 
 
     @Override
@@ -94,6 +95,7 @@ public class EventServiceImpl implements EventService {
         Event event = eventOptional.get();
         event.setIsPublished(true);
         eventRepository.save(event);
+        webSocketNotificationService.sendEventPublishedNotification(event.getId().toString());
         return eventMapper.toDto(event);
     }
 }
