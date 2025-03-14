@@ -56,4 +56,10 @@ public class ProjectController {
         ApiResponse<ProjectResponseVM> apiResponse = ApiResponse.success(response, "/api/projects");
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
     }
+    @GetMapping("/{startupId}/projects")
+    public ResponseEntity<List<ProjectResponseVM>> getProjectsByStartup(@PathVariable Long startupId) {
+        List<ProjectResponseVM> projects = projectService.getProjectsByStartupId(startupId);
+        return ResponseEntity.ok(projects);
+    }
+
 }

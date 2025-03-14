@@ -12,4 +12,6 @@ public interface ProjectService  {
     void deleteProject(Long id);
     List<ProjectResponseVM> getProjects();
     ProjectResponseVM updateStatus(Long projectId);
+
+    List<ProjectResponseVM> getProjectsByStartupId(Long startupId);
 }

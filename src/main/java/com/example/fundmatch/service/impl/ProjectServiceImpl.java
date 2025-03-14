@@ -3,7 +3,6 @@ package com.example.fundmatch.service.impl;
 import com.example.fundmatch.domain.dtos.request.project.CreateProjectRequestDto;
 import com.example.fundmatch.domain.entities.Project;
 import com.example.fundmatch.domain.entities.Startup;
-import com.example.fundmatch.domain.entities.User;
 import com.example.fundmatch.domain.enums.ProjectStatus;
 import com.example.fundmatch.domain.mappers.ProjectMapper;
 import com.example.fundmatch.domain.vm.AuthResponseVM;
@@ -19,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -94,4 +94,11 @@ public class ProjectServiceImpl implements ProjectService {
         projectRepository.save(project);
         return projectMapper.toDto(project);
     }
+
+    @Override
+    public List<ProjectResponseVM> getProjectsByStartupId(Long startupId) {
+        List<Project> projects = projectRepository.findByStartupId(startupId);
+        return projects.stream().map(projectMapper::toDto).collect(Collectors.toList());
+    }
+
 }
