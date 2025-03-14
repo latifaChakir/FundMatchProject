@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/feedbacks")
 @RequiredArgsConstructor
@@ -21,10 +23,18 @@ public class FeedbackController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/{feedbackId}/public")
+    @GetMapping("/{feedbackId}/public")
     public ResponseEntity<FeedbackResponseVM> markFeedbackAsPublic(@PathVariable Long feedbackId) {
         FeedbackResponseVM response = feedbackService.markFeedbackAsPublic(feedbackId);
         return ResponseEntity.ok(response);
+    }
+    @GetMapping("/myFeedbacks")
+    public List<FeedbackResponseVM> getMyFeedbacks() {
+        return feedbackService.loadMyFeedbacks();
+    }
+    @GetMapping("/getPublicFeedbacks/{projectId}")
+    public List<FeedbackResponseVM> getPublicFeedbacksByProject(@PathVariable Long projectId) {
+        return feedbackService.getPublicFeedbacksByProject(projectId);
     }
 }
 

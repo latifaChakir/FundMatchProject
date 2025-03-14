@@ -4,12 +4,14 @@ import com.example.fundmatch.domain.dtos.request.feedback.CreateFeedbackRequestD
 import com.example.fundmatch.domain.entities.Feedback;
 import com.example.fundmatch.domain.entities.Investor;
 import com.example.fundmatch.domain.entities.Project;
+import com.example.fundmatch.domain.entities.Startup;
 import com.example.fundmatch.domain.enums.FeedbackType;
 import com.example.fundmatch.domain.mappers.FeedbackMapper;
 import com.example.fundmatch.domain.vm.FeedbackResponseVM;
 import com.example.fundmatch.repository.FeedbackRepository;
 import com.example.fundmatch.repository.InvestorRepository;
 import com.example.fundmatch.repository.ProjectRepository;
+import com.example.fundmatch.repository.StartupRepository;
 import com.example.fundmatch.security.CustomUserDetails;
 import com.example.fundmatch.service.interfaces.FeedbackService;
 import com.example.fundmatch.shared.exception.ProjectNotFoundException;
@@ -20,6 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +31,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     private final FeedbackRepository feedbackRepository;
     private final ProjectRepository projectRepository;
     private final InvestorRepository investorRepository;
+    private final StartupRepository startupRepository;
 
 
     @Override
@@ -66,5 +70,36 @@ public class FeedbackServiceImpl implements FeedbackService {
         Feedback updatedFeedback = feedbackRepository.save(feedback);
         return feedbackMapper.toDto(updatedFeedback);
     }
+    @Override
+    public List<FeedbackResponseVM> loadMyFeedbacks(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof CustomUserDetails)) {
+            throw new IllegalStateException("Authentication principal is not of type CustomUserDetails.");
+        }
+
+        CustomUserDetails userDetails = (CustomUserDetails) principal;
+        Long userId = userDetails.getUserId();
+        Startup startup = startupRepository.findByUserId(userId)
+               .orElseThrow(() -> new EntityNotFoundException("Startup not found for User ID " + userId + "."));
+
+        List<Project> projects = startup.getProjects();
+        if (projects.isEmpty()) {
+            return List.of();        }
+
+        List<Feedback> feedbacks = feedbackRepository.findByProjectIn(projects);
+        return feedbackMapper.toDtoList(feedbacks);
+    }
+
+    @Override
+    public List<FeedbackResponseVM> getPublicFeedbacksByProject(Long projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ProjectNotFoundException("Project with ID " + projectId + " not found."));
+
+        List<Feedback> publicFeedbacks = feedbackRepository.findByProjectAndIsPrivateFalse(project);
+
+        return feedbackMapper.toDtoList(publicFeedbacks);
+    }
+
 
 }
