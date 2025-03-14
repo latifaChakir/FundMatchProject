@@ -22,5 +22,6 @@ public class ProjectResponseVM {
     private LocalDate createdAt;
     private ProjectStatus status;
     private Integer viewCount;
+    private String imagePath;
     private StartupResponseVM startup;
 }

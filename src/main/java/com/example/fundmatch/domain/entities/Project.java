@@ -42,5 +42,7 @@ public class Project {
     @ManyToOne
     @JoinColumn(name = "startup_id")
     private Startup startup;
+    private String imagePath;
+
 }
 

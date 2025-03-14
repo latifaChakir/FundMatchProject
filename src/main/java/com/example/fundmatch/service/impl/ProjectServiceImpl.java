@@ -15,7 +15,9 @@ import com.example.fundmatch.shared.exception.ProjectNotFoundException;
 import com.example.fundmatch.shared.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,9 +29,12 @@ public class ProjectServiceImpl implements ProjectService {
     private final ProjectMapper projectMapper;
     private final AuthService authService;
     private final StartupRepository startupRepository;
+    private final FileStorageService fileStorageService;
+
 
     @Override
-    public ProjectResponseVM saveProject(CreateProjectRequestDto projectRequest) {
+    public ProjectResponseVM saveProject(CreateProjectRequestDto projectRequest ,MultipartFile file) throws IOException {
+        String imagePath = (file != null) ? fileStorageService.saveFile(file) : null;
         AuthResponseVM currentUser = authService.getAuthenticatedUser();
         System.out.println(currentUser);
         Startup startup = startupRepository.findByUserId(currentUser.getId())
@@ -37,6 +42,7 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = projectMapper.toEntity(projectRequest);
         project.setStartup(startup);
         project.setStatus(ProjectStatus.PENDING);
+        project.setImagePath(imagePath);
         Project savedProject = projectRepository.save(project);
         return projectMapper.toDto(savedProject);
     }

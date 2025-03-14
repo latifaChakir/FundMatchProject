@@ -101,5 +101,20 @@ public class FeedbackServiceImpl implements FeedbackService {
         return feedbackMapper.toDtoList(publicFeedbacks);
     }
 
+    @Override
+    public List<FeedbackResponseVM> getPublicFeedbacksByStartup(Long startupId) {
+        Startup startup = startupRepository.findById(startupId)
+                .orElseThrow(() -> new EntityNotFoundException("Startup not found with ID " + startupId));
+
+        List<Project> projects = startup.getProjects();
+        if (projects.isEmpty()) {
+            return List.of();
+        }
+
+        List<Feedback> publicFeedbacks = feedbackRepository.findByProjectInAndIsPrivateFalse(projects);
+        return feedbackMapper.toDtoList(publicFeedbacks);
+    }
+
+
 
 }

@@ -10,4 +10,6 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
     List<Feedback> findByProjectIn(List<Project> projects);
 
     List<Feedback> findByProjectAndIsPrivateFalse(Project project);
+
+    List<Feedback> findByProjectInAndIsPrivateFalse(List<Project> projects);
 }

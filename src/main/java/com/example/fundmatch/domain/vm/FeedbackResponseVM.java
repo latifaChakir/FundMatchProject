@@ -14,4 +14,5 @@ public class FeedbackResponseVM {
     private String content;
     private String type;
     private Boolean isPrivate;
+
 }

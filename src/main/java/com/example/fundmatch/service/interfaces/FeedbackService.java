@@ -12,4 +12,6 @@ public interface FeedbackService {
     List<FeedbackResponseVM> loadMyFeedbacks();
 
     List<FeedbackResponseVM> getPublicFeedbacksByProject(Long projectId);
+
+    List<FeedbackResponseVM> getPublicFeedbacksByStartup(Long startupId);
 }

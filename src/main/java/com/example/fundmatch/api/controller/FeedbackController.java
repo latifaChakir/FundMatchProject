@@ -36,5 +36,9 @@ public class FeedbackController {
     public List<FeedbackResponseVM> getPublicFeedbacksByProject(@PathVariable Long projectId) {
         return feedbackService.getPublicFeedbacksByProject(projectId);
     }
+    @GetMapping("/PublicFeedbacksStartup/{startupId}")
+    public List<FeedbackResponseVM> getPublicFeedbacksByStartup(@PathVariable Long startupId) {
+        return feedbackService.getPublicFeedbacksByStartup(startupId);
+    }
 }
 
