@@ -106,5 +106,4 @@ public class ProjectServiceImpl implements ProjectService {
         List<Project> projects = projectRepository.findByStartupId(startupId);
         return projects.stream().map(projectMapper::toDto).collect(Collectors.toList());
     }
-
 }

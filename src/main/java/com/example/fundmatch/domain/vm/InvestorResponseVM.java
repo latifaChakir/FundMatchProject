@@ -1,5 +1,6 @@
 package com.example.fundmatch.domain.vm;
 
+import com.example.fundmatch.domain.entities.Project;
 import com.example.fundmatch.domain.entities.Sector;
 import lombok.*;
 
@@ -23,4 +24,6 @@ public class InvestorResponseVM {
     private String investmentStrategy;
     private List<String> preferredGeographies;
     private String contactInfo;
+    private List<ProjectResponseVM> savedProjects;
+
 }

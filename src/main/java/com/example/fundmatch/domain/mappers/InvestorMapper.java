@@ -13,6 +13,7 @@ import java.util.List;
 public interface InvestorMapper {
     Investor toEntity(CreateInvestorRequestDto dto);
     @Mapping(source = "sectors", target = "sectors")
+    @Mapping(source = "savedProjects", target = "savedProjects")
     InvestorResponseVM toDto(Investor entity);
 
     List<InvestorResponseVM> toDtoList(List<Investor> investors);

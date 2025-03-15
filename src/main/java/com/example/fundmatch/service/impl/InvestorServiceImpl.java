@@ -1,10 +1,14 @@
 package com.example.fundmatch.service.impl;
+import com.example.fundmatch.domain.entities.Project;
 import com.example.fundmatch.domain.entities.Sector;
 import com.example.fundmatch.domain.entities.User;
+import com.example.fundmatch.domain.mappers.ProjectMapper;
+import com.example.fundmatch.repository.ProjectRepository;
 import com.example.fundmatch.repository.SectorRepository;
 import com.example.fundmatch.repository.UserRepository;
 import com.example.fundmatch.security.CustomUserDetails;
-import com.example.fundmatch.security.CustomUserDetailsService;
+import com.example.fundmatch.shared.exception.ProjectNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.Authentication;
 import com.example.fundmatch.domain.dtos.request.investor.CreateInvestorRequestDto;
@@ -18,6 +22,7 @@ import com.example.fundmatch.shared.exception.InvestorOrganizationAlreadyExistsE
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +33,8 @@ public class InvestorServiceImpl implements InvestorService {
     private final InvestorMapper investorMapper;
     private final UserRepository userRepository;
     private final SectorRepository sectorRepository;
+    private final ProjectRepository projectRepository;
+    private final ProjectMapper projectMapper;
 
     @Override
     public InvestorResponseVM saveInvestor(CreateInvestorRequestDto createInvestorRequestDto) {
@@ -111,4 +118,49 @@ public class InvestorServiceImpl implements InvestorService {
         List<Investor> investors = investorRepository.findAll();
         return investorMapper.toDtoList(investors);
     }
+    @Override
+    public InvestorResponseVM bookProject(Long projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ProjectNotFoundException("Project with ID " + projectId + " not found."));
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+
+        if (!(principal instanceof CustomUserDetails userDetails)) {
+            throw new IllegalStateException("Authentication principal is not of type CustomUserDetails.");
+        }
+
+        Long userId = userDetails.getUserId();
+
+        Investor investor = investorRepository.findByUserId(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Investor not found for User ID " + userId + "."));
+
+        if (investor.getSavedProjects() == null) {
+            investor.setSavedProjects(new ArrayList<>());
+        }
+
+        if (!investor.getSavedProjects().contains(project)) {
+            investor.getSavedProjects().add(project);
+            investorRepository.save(investor);
+        }
+
+        return investorMapper.toDto(investor);
+    }
+    @Override
+    public InvestorResponseVM getInvestorSavedProjects() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+
+        if (!(principal instanceof CustomUserDetails userDetails)) {
+            throw new IllegalStateException("Authentication principal is not of type CustomUserDetails.");
+        }
+
+        Long userId = userDetails.getUserId();
+
+        Investor investor = investorRepository.findByUserId(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Investor not found for User ID " + userId + "."));
+
+        return investorMapper.toDto(investor);
+    }
+
 }

@@ -49,4 +49,12 @@ public class InvestorController{
         ApiResponse<List<InvestorResponseVM>> apiResponse = ApiResponse.success(response, "/api/investors");
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
+    @GetMapping("/bookProject/{projectId}")
+    public InvestorResponseVM bookProject(@PathVariable long projectId) {
+        return investorService.bookProject(projectId);
+    }
+    @GetMapping("getBookProjectSaved")
+    public InvestorResponseVM getBookProjectSaved() {
+        return investorService.getInvestorSavedProjects();
+    }
 }

@@ -15,4 +15,8 @@ public interface InvestorService {
     void deleteInvestor(Long id);
 
     List<InvestorResponseVM> getInvestors();
+
+    InvestorResponseVM bookProject(Long projectId);
+
+    InvestorResponseVM getInvestorSavedProjects();
 }
