@@ -34,4 +34,8 @@ public class UserController{
     public UserResponseVM blockUser(@PathVariable Long id) {
         return userService.blockUser(id);
     }
+    @GetMapping("/unBlock/{id}")
+    public UserResponseVM unBlockUser(@PathVariable Long id) {
+        return userService.unBlockUser(id);
+    }
 }

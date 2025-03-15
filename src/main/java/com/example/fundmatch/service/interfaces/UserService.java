@@ -9,4 +9,6 @@ public interface UserService   {
     List<UserResponseVM> getUsers();
 
     UserResponseVM blockUser(Long userId);
+
+    UserResponseVM unBlockUser(Long userId);
 }

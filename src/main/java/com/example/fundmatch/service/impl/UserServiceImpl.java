@@ -28,4 +28,13 @@ public class UserServiceImpl implements UserService {
         return userMapper.toEntity(updatedUser);
     }
 
+    @Override
+    public UserResponseVM unBlockUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        user.setIsActive(true);
+        User updatedUser = userRepository.save(user);
+        return userMapper.toEntity(updatedUser);
+    }
+
 }
