@@ -1,6 +1,9 @@
 package com.example.fundmatch.domain.vm;
 
+import com.example.fundmatch.domain.entities.Role;
 import lombok.*;
+
+import java.util.Set;
 
 @Builder
 @Getter
@@ -13,4 +16,7 @@ public class UserResponseVM {
     private String firstName;
     private String lastName;
     private String phoneNumber;
+    private Set<Role> roles;
+    private Boolean isActive;
+
 }

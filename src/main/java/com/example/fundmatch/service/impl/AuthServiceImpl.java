@@ -49,7 +49,7 @@ public class AuthServiceImpl implements AuthService {
                 .firstName(registerRequest.getFirstName())
                 .lastName(registerRequest.getLastName())
                 .phoneNumber(registerRequest.getPhoneNumber())
-                .isActive(registerRequest.isActive())
+                .isActive(true)
                 .createdAt(new Date())
                 .isVerified(false)
                 .roles(new HashSet<>())

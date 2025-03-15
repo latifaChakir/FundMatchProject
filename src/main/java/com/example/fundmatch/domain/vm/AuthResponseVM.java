@@ -22,4 +22,5 @@ public class AuthResponseVM {
     private Set<Role> roles;
     private String token;
     private String refreshToken;
+    private Boolean isActive;
 }

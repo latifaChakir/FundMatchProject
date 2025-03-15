@@ -29,8 +29,7 @@ public class User implements UserDetails {
     private Date resetTokenExpiration;
 
     @Column(nullable = false)
-    private boolean isActive;
-
+    private Boolean isActive = true;
     private Boolean isVerified;
 
     @Temporal(TemporalType.TIMESTAMP)

@@ -5,6 +5,7 @@ import com.example.fundmatch.domain.vm.UserResponseVM;
 import com.example.fundmatch.repository.UserRepository;
 import com.example.fundmatch.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,4 +19,13 @@ public class UserServiceImpl implements UserService {
         List<User> users = userRepository.findAll() ;
         return userMapper.toDtoList(users);
     }
+    @Override
+    public UserResponseVM blockUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        user.setIsActive(false);
+        User updatedUser = userRepository.save(user);
+        return userMapper.toEntity(updatedUser);
+    }
+
 }

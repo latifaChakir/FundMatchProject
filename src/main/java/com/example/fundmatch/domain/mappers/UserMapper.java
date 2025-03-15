@@ -22,6 +22,8 @@ public interface UserMapper {
     })
     AuthResponseVM toDto(User user);
 
+    UserResponseVM toEntity(User user);
+
     default Set<Role> map(Set<Long> roleIds) {
         if (roleIds == null) {
             return null;
@@ -38,6 +40,11 @@ public interface UserMapper {
     }
 
     List<UserResponseVM> toDtoList(List<User> users);
+    @Mappings({
+            @Mapping(target = "roles", source = "user.roles")
+    })
     List<UserResponseVM> toDtoList(Set<User> users);
+
+
 }
 
