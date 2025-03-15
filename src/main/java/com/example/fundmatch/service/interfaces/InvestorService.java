@@ -19,4 +19,6 @@ public interface InvestorService {
     InvestorResponseVM bookProject(Long projectId);
 
     InvestorResponseVM getInvestorSavedProjects();
+
+    InvestorResponseVM unsaveProject(Long projectId);
 }

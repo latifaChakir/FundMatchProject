@@ -57,4 +57,9 @@ public class InvestorController{
     public InvestorResponseVM getBookProjectSaved() {
         return investorService.getInvestorSavedProjects();
     }
+    @GetMapping("/unSaveProject/{projectId}")
+    public InvestorResponseVM unSaveProject(@PathVariable long projectId) {
+        return investorService.unsaveProject(projectId);
+    }
+
 }

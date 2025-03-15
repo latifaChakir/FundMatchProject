@@ -163,4 +163,30 @@ public class InvestorServiceImpl implements InvestorService {
         return investorMapper.toDto(investor);
     }
 
+    @Override
+    public InvestorResponseVM unsaveProject(Long projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ProjectNotFoundException("Project with ID " + projectId + " not found."));
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+
+        if (!(principal instanceof CustomUserDetails userDetails)) {
+            throw new IllegalStateException("Authentication principal is not of type CustomUserDetails.");
+        }
+
+        Long userId = userDetails.getUserId();
+
+        Investor investor = investorRepository.findByUserId(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Investor not found for User ID " + userId + "."));
+
+        if (investor.getSavedProjects() != null && investor.getSavedProjects().contains(project)) {
+            investor.getSavedProjects().remove(project);
+            investorRepository.save(investor);
+        }
+
+        return investorMapper.toDto(investor);
+    }
+
+
 }
