@@ -19,6 +19,7 @@ public class InvestorResponseVM {
     private Double maxInvestment;
     private String investmentType;
     private String location;
+    private UserResponseVM user;
     private Integer experienceYears;
     private Integer averageInvestmentsPerYear;
     private String investmentStrategy;

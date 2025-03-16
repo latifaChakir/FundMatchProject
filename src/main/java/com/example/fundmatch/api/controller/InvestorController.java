@@ -61,5 +61,9 @@ public class InvestorController{
     public InvestorResponseVM unSaveProject(@PathVariable long projectId) {
         return investorService.unsaveProject(projectId);
     }
+    @GetMapping("/getInvestor")
+    public InvestorResponseVM getInvestor() {
+        return investorService.getInvestorByUserId();
+    }
 
 }

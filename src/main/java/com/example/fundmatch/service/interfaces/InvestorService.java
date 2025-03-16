@@ -21,4 +21,6 @@ public interface InvestorService {
     InvestorResponseVM getInvestorSavedProjects();
 
     InvestorResponseVM unsaveProject(Long projectId);
+
+    InvestorResponseVM getInvestorByUserId();
 }

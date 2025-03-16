@@ -188,5 +188,19 @@ public class InvestorServiceImpl implements InvestorService {
         return investorMapper.toDto(investor);
     }
 
+    @Override
+    public InvestorResponseVM getInvestorByUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+
+        if (!(principal instanceof CustomUserDetails userDetails)) {
+            throw new IllegalStateException("Authentication principal is not of type CustomUserDetails.");
+        }
+
+        Long userId = userDetails.getUserId();
+        Investor investor = investorRepository.findByUserId(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Investor not found for User ID " + userId + "."));
+        return investorMapper.toDto(investor);
+    }
 
 }
