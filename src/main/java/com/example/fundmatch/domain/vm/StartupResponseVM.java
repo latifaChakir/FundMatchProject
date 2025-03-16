@@ -1,7 +1,4 @@
 package com.example.fundmatch.domain.vm;
-
-import com.example.fundmatch.domain.entities.Sector;
-import com.example.fundmatch.domain.entities.Stage;
 import lombok.*;
 
 import java.util.List;
@@ -25,6 +22,7 @@ public class StartupResponseVM {
     private String headquarters;
     private String contactInfo;
     private String imagePath;
+    private UserResponseVM user;
     private List<SectorResponseVM> sectors;
     private List<StageResponseVM> stages;
 }

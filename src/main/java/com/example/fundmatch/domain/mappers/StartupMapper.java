@@ -20,6 +20,7 @@ public interface StartupMapper {
     Startup toEntity(CreateStartupRequestDto dto);
 
     @Mapping(source = "stages", target = "stages")
+    @Mapping(source = "user", target = "user")
     @Mapping(source = "sectors", target = "sectors")
     @Mapping(source = "imagePath", target = "imagePath", qualifiedByName = "mapImagePathFromEntity")
     StartupResponseVM toDto(Startup entity);

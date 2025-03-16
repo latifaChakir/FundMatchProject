@@ -11,7 +11,9 @@ public interface StartupService  {
     StartupResponseVM saveStartup(CreateStartupRequestDto createStartupRequestDto, MultipartFile file) throws IOException;
 
     StartupResponseVM getStartupById(Long id);
-    StartupResponseVM updateStartup(CreateStartupRequestDto createStartupRequestDto, Long id);
+    StartupResponseVM updateStartup(CreateStartupRequestDto createStartupRequestDto, Long id, MultipartFile file) throws IOException;
     void deleteStartup(Long id);
     List<StartupResponseVM> getStartups();
+
+    StartupResponseVM getStartupByUserId();
 }

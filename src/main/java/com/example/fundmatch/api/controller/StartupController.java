@@ -34,9 +34,13 @@ public class StartupController {
     }
 
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<StartupResponseVM>> updateStartup(@PathVariable long id , @Valid @RequestBody CreateStartupRequestDto startupRequest) {
-        StartupResponseVM response = startupService.updateStartup(startupRequest, id);
+    @PutMapping(value = "/update/{id}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponse<StartupResponseVM>> updateStartup(
+            @PathVariable long id ,
+            @Valid @ModelAttribute CreateStartupRequestDto startupRequest,
+            @RequestPart(value = "file", required = false) MultipartFile file) throws IOException
+    {
+        StartupResponseVM response = startupService.updateStartup(startupRequest, id,file);
         ApiResponse<StartupResponseVM> apiResponse = ApiResponse.success(response, "/api/startups");
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
     }
@@ -58,5 +62,9 @@ public class StartupController {
         List<StartupResponseVM> response = startupService.getStartups();
         ApiResponse<List<StartupResponseVM>> apiResponse = ApiResponse.success(response, "/api/startups");
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+    @GetMapping("/getStartup")
+    public StartupResponseVM getInvestor() {
+        return startupService.getStartupByUserId();
     }
 }

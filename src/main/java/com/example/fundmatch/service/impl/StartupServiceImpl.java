@@ -14,6 +14,7 @@ import com.example.fundmatch.shared.exception.DuplicateResourceException;
 import com.example.fundmatch.shared.exception.ResourceNotFoundException;
 import com.example.fundmatch.shared.exception.SectorNotFoundException;
 import com.example.fundmatch.shared.exception.StageNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -80,13 +82,19 @@ public class StartupServiceImpl implements StartupService {
     }
 
     @Override
-    public StartupResponseVM updateStartup(CreateStartupRequestDto createStartupRequestDto, Long id) {
+    public StartupResponseVM updateStartup(CreateStartupRequestDto createStartupRequestDto, Long id, MultipartFile file) throws IOException {
+        System.out.println("hello from update");
         Startup startup = startupRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Startup not found."));
 
         if (!startup.getCompanyName().equals(createStartupRequestDto.getCompanyName()) &&
                 startupRepository.existsByCompanyName(createStartupRequestDto.getCompanyName())) {
             throw new DuplicateResourceException("Company name already exists.");
+        }
+
+        if (file != null && !file.isEmpty()) {
+            String imagePath = fileStorageService.saveFile(file);
+            startup.setImagePath(imagePath);
         }
 
         startup.setCompanyName(createStartupRequestDto.getCompanyName());
@@ -99,8 +107,18 @@ public class StartupServiceImpl implements StartupService {
         startup.setGrowthRate(createStartupRequestDto.getGrowthRate());
         startup.setHeadquarters(createStartupRequestDto.getHeadquarters());
         startup.setContactInfo(createStartupRequestDto.getContactInfo());
-        startup.setSectors(createStartupRequestDto.getSectors());
-        startup.setStages(createStartupRequestDto.getStages());
+
+        List<Sector> sectors = createStartupRequestDto.getSectors().stream()
+                .map(sector -> sectorRepository.findById(sector.getId())
+                        .orElseThrow(() -> new SectorNotFoundException("Sector not found with ID: " + sector.getId())))
+                .collect(Collectors.toList());
+        startup.setSectors(sectors);
+
+        List<Stage> stages = createStartupRequestDto.getStages().stream()
+                .map(stage -> stageRepository.findById(stage.getId())
+                        .orElseThrow(() -> new StageNotFoundException("Stage not found with ID: " + stage.getId())))
+                .collect(Collectors.toList());
+        startup.setStages(stages);
 
         Startup updatedStartup = startupRepository.save(startup);
         return startupMapper.toDto(updatedStartup);
@@ -118,5 +136,20 @@ public class StartupServiceImpl implements StartupService {
     public List<StartupResponseVM> getStartups() {
         List<Startup> startups = startupRepository.findAll();
         return startupMapper.toDtoList(startups);
+    }
+
+    @Override
+    public StartupResponseVM getStartupByUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+
+        if (!(principal instanceof CustomUserDetails userDetails)) {
+            throw new IllegalStateException("Authentication principal is not of type CustomUserDetails.");
+        }
+
+        Long userId = userDetails.getUserId();
+        Startup startup = startupRepository.findByUserId(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Startup not found for User ID " + userId + "."));
+        return startupMapper.toDto(startup);
     }
 }
