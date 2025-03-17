@@ -27,7 +27,6 @@ public class ZoomController {
         String startTime = (String) payload.get("startTime");
         int duration = (int) payload.get("duration");
 
-        // Récupérer l'utilisateur connecté
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();
 
@@ -37,7 +36,6 @@ public class ZoomController {
         CustomUserDetails userDetails = (CustomUserDetails) principal;
         String createdBy = userDetails.getUsername();
 
-        // Convertir startTime en LocalDateTime
         LocalDateTime startDateTime = LocalDateTime.parse(startTime, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
         Map<String, Object> meeting = zoomService.createMeetingJoin(topic, startDateTime, duration, createdBy);

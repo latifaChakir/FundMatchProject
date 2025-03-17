@@ -76,11 +76,9 @@ public class ZoomService {
             ResponseEntity<Map> response = restTemplate.exchange(ZOOM_API_URL, HttpMethod.POST, request, Map.class);
 
             if (response.getStatusCode() == HttpStatus.CREATED && response.getBody() != null) {
-                // Récupérer les informations de la réunion Zoom
                 String joinUrl = (String) response.getBody().get("join_url");
                 String zoomStartTime = (String) response.getBody().get("start_time");
 
-                // Sauvegarder en base de données
                 MeetingJoin MeetingJoin = new MeetingJoin(null,topic, zoomStartTime, durationMinutes, joinUrl, createdBy);
                 MeetingJoinRepository.save(MeetingJoin);
 
