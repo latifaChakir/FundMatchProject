@@ -52,6 +52,7 @@ public class UserServiceTest {
         assertEquals(1, result.size());
         assertEquals(userResponseVM, result.get(0));
     }
+    //Bloque user
 
     @Test
     void blockUser_WhenUserExists_BlocksUser() {
