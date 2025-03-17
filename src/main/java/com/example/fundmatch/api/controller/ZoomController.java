@@ -1,5 +1,6 @@
 package com.example.fundmatch.api.controller;
 
+import com.example.fundmatch.domain.entities.MeetingJoin;
 import com.example.fundmatch.security.CustomUserDetails;
 import com.example.fundmatch.service.impl.ZoomService;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -40,6 +42,11 @@ public class ZoomController {
 
         Map<String, Object> meeting = zoomService.createMeetingJoin(topic, startDateTime, duration, createdBy);
         return ResponseEntity.ok(meeting);
+    }
+
+    @GetMapping("/myMeetings")
+    public List<MeetingJoin> getUserMeetings(){
+        return zoomService.getUserMeetings();
     }
 }
 

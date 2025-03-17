@@ -2,8 +2,11 @@ package com.example.fundmatch.service.impl;
 
 import com.example.fundmatch.domain.entities.MeetingJoin;
 import com.example.fundmatch.repository.MeetingJoinRepository;
+import com.example.fundmatch.security.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -11,6 +14,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -89,5 +93,16 @@ public class ZoomService {
         } catch (Exception e) {
             throw new RuntimeException("Failed to create Zoom MeetingJoin", e);
         }
+    }
+    public List<MeetingJoin> getUserMeetings(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+
+        if (!(principal instanceof CustomUserDetails)) {
+            throw new IllegalStateException("Authentication principal is not of type CustomUserDetails");
+        }
+        CustomUserDetails userDetails = (CustomUserDetails) principal;
+        String createdBy = userDetails.getUsername();
+        return MeetingJoinRepository.findAllByCreatedBy(createdBy);
     }
 }
