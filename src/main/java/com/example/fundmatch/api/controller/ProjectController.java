@@ -66,5 +66,10 @@ public class ProjectController {
         List<ProjectResponseVM> projects = projectService.getProjectsByStartupId(startupId);
         return ResponseEntity.ok(projects);
     }
+    @GetMapping("/userProjects")
+    public ResponseEntity<List<ProjectResponseVM>> getUserProjects() {
+        List<ProjectResponseVM> projects = projectService.getProjectsForCurrentUser();
+        return ResponseEntity.ok(projects);
+    }
 
 }

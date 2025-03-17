@@ -16,4 +16,6 @@ public interface ProjectService  {
     ProjectResponseVM updateStatus(Long projectId);
 
     List<ProjectResponseVM> getProjectsByStartupId(Long startupId);
+
+    List<ProjectResponseVM> getProjectsForCurrentUser();
 }

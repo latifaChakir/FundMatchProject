@@ -13,6 +13,7 @@ import com.example.fundmatch.service.interfaces.AuthService;
 import com.example.fundmatch.service.interfaces.ProjectService;
 import com.example.fundmatch.shared.exception.ProjectNotFoundException;
 import com.example.fundmatch.shared.exception.ResourceNotFoundException;
+import com.example.fundmatch.shared.exception.StartupNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -104,6 +105,15 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<ProjectResponseVM> getProjectsByStartupId(Long startupId) {
         List<Project> projects = projectRepository.findByStartupId(startupId);
+        return projects.stream().map(projectMapper::toDto).collect(Collectors.toList());
+    }
+    @Override
+    public List<ProjectResponseVM> getProjectsForCurrentUser() {
+        AuthResponseVM currentUser = authService.getAuthenticatedUser();
+        Startup startup = startupRepository.findByUserId(currentUser.getId())
+                .orElseThrow(() -> new StartupNotFoundException("Aucune startup associée à l'utilisateur actuel."));
+
+        List<Project> projects = projectRepository.findByStartupId(startup.getId());
         return projects.stream().map(projectMapper::toDto).collect(Collectors.toList());
     }
 }
