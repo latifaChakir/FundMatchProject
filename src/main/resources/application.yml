@@ -33,4 +33,7 @@ mail:
   properties:
     mail.smtp.auth: true
     mail.smtp.starttls.enable: true
-
+zoom:
+  client-id: hYUeFx46SjWSlxAPDugYQ
+  client-secret: g4KvK32MkGcvAWK4NEqUMDz0Xn1slwMf
+  account-id: FC8LKKWtRymbZCOoxTdywQ
