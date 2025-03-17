@@ -1,5 +1,7 @@
 package com.example.fundmatch.service.impl;
 
+import com.example.fundmatch.domain.entities.MeetingJoin;
+import com.example.fundmatch.repository.MeetingJoinRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -27,13 +29,13 @@ public class ZoomService {
     private String accountId;
 
     private final RestTemplate restTemplate;
+    private final MeetingJoinRepository MeetingJoinRepository;
 
-    // Constructor injection
-    public ZoomService(RestTemplate restTemplate) {
+    public ZoomService(RestTemplate restTemplate, MeetingJoinRepository MeetingJoinRepository) {
         this.restTemplate = restTemplate;
+        this.MeetingJoinRepository = MeetingJoinRepository;
     }
 
-    // Méthode pour récupérer un token d'accès OAuth
     private String getAccessToken() {
         try {
             HttpHeaders headers = new HttpHeaders();
@@ -53,8 +55,7 @@ public class ZoomService {
         }
     }
 
-    // Méthode pour créer une réunion Zoom
-    public Map<String, Object> createMeeting(String topic, LocalDateTime startTime, int durationMinutes) {
+    public Map<String, Object> createMeetingJoin(String topic, LocalDateTime startTime, int durationMinutes, String createdBy) {
         try {
             String accessToken = getAccessToken();
 
@@ -64,23 +65,31 @@ public class ZoomService {
 
             Map<String, Object> requestBody = new HashMap<>();
             requestBody.put("topic", topic);
-            requestBody.put("type", 2); // Scheduled meeting
+            requestBody.put("type", 2);
 
-            // Format date as ISO-8601
-            String formattedTime = startTime.atZone(ZoneOffset.UTC)
-                    .format(DateTimeFormatter.ISO_INSTANT);
+            String formattedTime = startTime.atZone(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT);
             requestBody.put("start_time", formattedTime);
-
             requestBody.put("duration", durationMinutes);
             requestBody.put("timezone", "UTC");
 
             HttpEntity<Map<String, Object>> request = new HttpEntity<>(requestBody, headers);
-            ResponseEntity<Map> response = restTemplate.exchange(
-                    ZOOM_API_URL, HttpMethod.POST, request, Map.class);
+            ResponseEntity<Map> response = restTemplate.exchange(ZOOM_API_URL, HttpMethod.POST, request, Map.class);
 
-            return response.getBody();
+            if (response.getStatusCode() == HttpStatus.CREATED && response.getBody() != null) {
+                // Récupérer les informations de la réunion Zoom
+                String joinUrl = (String) response.getBody().get("join_url");
+                String zoomStartTime = (String) response.getBody().get("start_time");
+
+                // Sauvegarder en base de données
+                MeetingJoin MeetingJoin = new MeetingJoin(null,topic, zoomStartTime, durationMinutes, joinUrl, createdBy);
+                MeetingJoinRepository.save(MeetingJoin);
+
+                return response.getBody();
+            } else {
+                throw new RuntimeException("Failed to create Zoom MeetingJoin");
+            }
         } catch (Exception e) {
-            throw new RuntimeException("Failed to create Zoom meeting", e);
+            throw new RuntimeException("Failed to create Zoom MeetingJoin", e);
         }
     }
 }

@@ -1,10 +1,14 @@
 package com.example.fundmatch.api.controller;
 
+import com.example.fundmatch.security.CustomUserDetails;
 import com.example.fundmatch.service.impl.ZoomService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 @RestController
@@ -18,14 +22,25 @@ public class ZoomController {
     }
 
     @PostMapping("/create-meeting")
-    public ResponseEntity<?> createMeeting(@RequestBody Map<String, String> requestData) {
-        String topic = requestData.get("topic"); // Récupération du "topic"
+    public ResponseEntity<Map<String, Object>> createMeeting(@RequestBody Map<String, Object> payload) {
+        String topic = (String) payload.get("topic");
+        String startTime = (String) payload.get("startTime");
+        int duration = (int) payload.get("duration");
 
-        if (topic == null || topic.isEmpty()) {
-            return ResponseEntity.badRequest().body("Le paramètre 'topic' est requis.");
+        // Récupérer l'utilisateur connecté
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+
+        if (!(principal instanceof CustomUserDetails)) {
+            throw new IllegalStateException("Authentication principal is not of type CustomUserDetails");
         }
+        CustomUserDetails userDetails = (CustomUserDetails) principal;
+        String createdBy = userDetails.getUsername();
 
-        Map<String, Object> meeting = zoomService.createMeeting(topic, LocalDateTime.now().plusDays(1), 60);
+        // Convertir startTime en LocalDateTime
+        LocalDateTime startDateTime = LocalDateTime.parse(startTime, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+
+        Map<String, Object> meeting = zoomService.createMeetingJoin(topic, startDateTime, duration, createdBy);
         return ResponseEntity.ok(meeting);
     }
 }
