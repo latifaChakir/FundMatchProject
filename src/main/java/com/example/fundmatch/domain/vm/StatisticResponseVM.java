@@ -19,4 +19,13 @@ public class StatisticResponseVM {
     Map<String, Long> startupsPerSector;
     Map<String, Long> investorsPerSector;
     Map<String, Long> startupsPerStages;
+    private long projectsForCurrentStartup;
+    private long completedProjects;
+    private long pendingProjects;
+    private long totalFeedbackCount;
+    private long savedProjectsCount;
+    private long totalMeetings;
+    private long overdueMeetings;
+    private long upcomingMeetings;
+
 }
