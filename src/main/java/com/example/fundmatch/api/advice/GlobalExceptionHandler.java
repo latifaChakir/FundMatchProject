@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
                 .message("Validation failed")
                 .path("/api/validation-error")
                 .statusCode(HttpStatus.BAD_REQUEST.value())
-                .data(errors)  // Définir les données directement dans le builder
+                .data(errors)
                 .success(false)
                 .timestamp(LocalDateTime.now())
                 .traceId(ApiResponse.generateTraceId())
@@ -52,6 +52,15 @@ public class GlobalExceptionHandler {
         ApiResponse<String> response = ApiResponse.error(
                 ex.getMessage(),
                 "/api/stages",
+                HttpStatus.BAD_REQUEST.value()
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(AccountDisabledException.class)
+    public ResponseEntity<ApiResponse<String>> handleAccountDisabledException(AccountDisabledException ex) {
+        ApiResponse<String> response = ApiResponse.error(
+                ex.getMessage(),
+                "/api/users",
                 HttpStatus.BAD_REQUEST.value()
         );
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);

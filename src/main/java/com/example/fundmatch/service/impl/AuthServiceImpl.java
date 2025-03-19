@@ -1,6 +1,6 @@
 package com.example.fundmatch.service.impl;
 import com.example.fundmatch.security.CustomUserDetails;
-import com.example.fundmatch.shared.exception.InvalidToken;
+import com.example.fundmatch.shared.exception.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.Authentication;
 import com.example.fundmatch.domain.dtos.request.auth.LoginRequest;
@@ -15,9 +15,6 @@ import com.example.fundmatch.repository.UserRepository;
 import com.example.fundmatch.security.JwtService;
 import com.example.fundmatch.service.interfaces.AuthService;
 import com.example.fundmatch.service.interfaces.RefreshTokenService;
-import com.example.fundmatch.shared.exception.CustomException;
-import com.example.fundmatch.shared.exception.EmailAlreadyInUseException;
-import com.example.fundmatch.shared.exception.InvalidCredentialsException;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -71,20 +68,28 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthResponseVM login(LoginRequest loginRequest) {
         Optional<User> userOptional = userRepository.findByEmail(loginRequest.getEmail());
+
         if (userOptional.isEmpty()) {
             throw new InvalidCredentialsException("Invalid email or password");
         }
 
         User user = userOptional.get();
+
+        if (!Boolean.TRUE.equals(user.getIsActive())) {
+            throw new AccountDisabledException("Compte désactivé. Veuillez contacter l'administrateur.");
+        }
+
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             throw new InvalidCredentialsException("Invalid email or password.");
         }
 
         String token = jwtService.generateToken(user, user.getId());
         String refreshToken = refreshTokenService.createRefreshToken(user).getToken();
+
         AuthResponseVM authResponseVM = userMapper.toDto(user);
         authResponseVM.setToken(token);
         authResponseVM.setRefreshToken(refreshToken);
+
         return authResponseVM;
     }
     @Override
