@@ -95,5 +95,120 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(EmailAlreadyInUseException.class)
+    public ResponseEntity<ApiResponse<String>> handleEmailAlreadyInUseException(EmailAlreadyInUseException ex) {
+        ApiResponse<String> response = ApiResponse.error(
+                ex.getMessage(),
+                "/api/users",
+                HttpStatus.BAD_REQUEST.value()
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(EventNotFoundException.class)
+    public ResponseEntity<ApiResponse<String>> handleEventNotFoundException(EventNotFoundException ex) {
+        ApiResponse<String> response = ApiResponse.error(
+                ex.getMessage(),
+                "/api/users",
+                HttpStatus.BAD_REQUEST.value()
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvestorNotFoundException.class)
+    public ResponseEntity<ApiResponse<String>> handleInvestorNotFoundException(InvestorNotFoundException ex) {
+        ApiResponse<String> response = ApiResponse.error(
+                ex.getMessage(),
+                "/api/investors",
+                HttpStatus.BAD_REQUEST.value()
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(InvestorOrganizationAlreadyExistsException.class)
+    public ResponseEntity<ApiResponse<String>> handleInvestorOrganizationAlreadyExistsException(InvestorOrganizationAlreadyExistsException ex) {
+        ApiResponse<String> response = ApiResponse.error(
+                ex.getMessage(),
+                "/api/investors",
+                HttpStatus.BAD_REQUEST.value()
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ProjectNotFoundException.class)
+    public ResponseEntity<ApiResponse<String>> handleProjectNotFoundException(ProjectNotFoundException ex) {
+        ApiResponse<String> response = ApiResponse.error(
+                ex.getMessage(),
+                "/api/projects",
+                HttpStatus.BAD_REQUEST.value()
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PaymentException.class)
+    public ResponseEntity<ApiResponse<String>> handlePaymentException(PaymentException ex) {
+        ApiResponse<String> response = ApiResponse.error(
+                ex.getMessage(),
+                "/api/reservations",
+                HttpStatus.BAD_REQUEST.value()
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ReservationLimitExceededException.class)
+    public ResponseEntity<ApiResponse<String>> handleReservationLimitExceededException(ReservationLimitExceededException ex) {
+        ApiResponse<String> response = ApiResponse.error(
+                ex.getMessage(),
+                "/api/reservations",
+                HttpStatus.BAD_REQUEST.value()
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(RoleNameAlreadyExistsException.class)
+    public ResponseEntity<ApiResponse<String>> handleRoleNameAlreadyExistsException(RoleNameAlreadyExistsException ex) {
+        ApiResponse<String> response = ApiResponse.error(
+                ex.getMessage(),
+                "/api/roles",
+                HttpStatus.BAD_REQUEST.value()
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(SectorNameAlreadyExistsException.class)
+    public ResponseEntity<ApiResponse<String>> handleSectorNameAlreadyExistsException(SectorNameAlreadyExistsException ex) {
+        ApiResponse<String> response = ApiResponse.error(
+                ex.getMessage(),
+                "/api/sectors",
+                HttpStatus.BAD_REQUEST.value()
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(SectorNotFoundException.class)
+    public ResponseEntity<ApiResponse<String>> handleSectorNotFoundException(SectorNotFoundException ex) {
+        ApiResponse<String> response = ApiResponse.error(
+                ex.getMessage(),
+                "/api/sectors",
+                HttpStatus.BAD_REQUEST.value()
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(StageNameAlreadyExistsException.class)
+    public ResponseEntity<ApiResponse<String>> handleStageNameAlreadyExistsException(SectorNotFoundException ex) {
+        ApiResponse<String> response = ApiResponse.error(
+                ex.getMessage(),
+                "/api/sectors",
+                HttpStatus.BAD_REQUEST.value()
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(StartupNotFoundException.class)
+    public ResponseEntity<ApiResponse<String>> handleStartupNotFoundException(StartupNotFoundException ex) {
+        ApiResponse<String> response = ApiResponse.error(
+                ex.getMessage(),
+                "/api/startups",
+                HttpStatus.BAD_REQUEST.value()
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 
 }
