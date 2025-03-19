@@ -192,15 +192,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(StageNameAlreadyExistsException.class)
-    public ResponseEntity<ApiResponse<String>> handleStageNameAlreadyExistsException(SectorNotFoundException ex) {
-        ApiResponse<String> response = ApiResponse.error(
-                ex.getMessage(),
-                "/api/sectors",
-                HttpStatus.BAD_REQUEST.value()
-        );
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
     @ExceptionHandler(StartupNotFoundException.class)
     public ResponseEntity<ApiResponse<String>> handleStartupNotFoundException(StartupNotFoundException ex) {
         ApiResponse<String> response = ApiResponse.error(
