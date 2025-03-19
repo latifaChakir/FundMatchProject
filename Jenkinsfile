@@ -19,7 +19,7 @@ pipeline {
                     deleteDir()
                     echo "Clonage du dépôt Git..."
                     bat '''
-                        git clone https://github.com/latifaChakir/eBankify .
+                        git clone https://github.com/latifaChakir/FundMatchProject .
                         echo "Dépôt cloné avec succès."
                     '''
                 }
