@@ -1,6 +1,8 @@
 package com.example.fundmatch.service.impl;
 
 import com.example.fundmatch.domain.entities.MeetingJoin;
+import com.example.fundmatch.domain.enums.MeetingStatus;
+import com.example.fundmatch.domain.enums.MeetingType;
 import com.example.fundmatch.repository.MeetingJoinRepository;
 import com.example.fundmatch.security.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Value;
@@ -59,7 +61,7 @@ public class ZoomService {
         }
     }
 
-    public Map<String, Object> createMeetingJoin(String topic, LocalDateTime startTime, int durationMinutes, String createdBy) {
+    public Map<String, Object> createMeetingJoin(String topic, LocalDateTime startTime, int durationMinutes, String createdBy, MeetingType type, MeetingStatus status) {
         try {
             String accessToken = getAccessToken();
 
@@ -83,7 +85,7 @@ public class ZoomService {
                 String joinUrl = (String) response.getBody().get("join_url");
                 String zoomStartTime = (String) response.getBody().get("start_time");
 
-                MeetingJoin MeetingJoin = new MeetingJoin(null,topic, zoomStartTime, durationMinutes, joinUrl, createdBy);
+                MeetingJoin MeetingJoin = new MeetingJoin(null,topic, zoomStartTime, durationMinutes, joinUrl, createdBy,type, status);
                 MeetingJoinRepository.save(MeetingJoin);
 
                 return response.getBody();

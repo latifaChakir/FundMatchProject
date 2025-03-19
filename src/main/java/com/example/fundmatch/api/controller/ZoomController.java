@@ -1,6 +1,8 @@
 package com.example.fundmatch.api.controller;
 
 import com.example.fundmatch.domain.entities.MeetingJoin;
+import com.example.fundmatch.domain.enums.MeetingStatus;
+import com.example.fundmatch.domain.enums.MeetingType;
 import com.example.fundmatch.security.CustomUserDetails;
 import com.example.fundmatch.service.impl.ZoomService;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,8 @@ public class ZoomController {
         String topic = (String) payload.get("topic");
         String startTime = (String) payload.get("startTime");
         int duration = (int) payload.get("duration");
+        MeetingType type = MeetingType.valueOf((String) payload.get("type"));
+        MeetingStatus status = MeetingStatus.SCHEDULED;
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();
@@ -40,7 +44,7 @@ public class ZoomController {
 
         LocalDateTime startDateTime = LocalDateTime.parse(startTime, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
-        Map<String, Object> meeting = zoomService.createMeetingJoin(topic, startDateTime, duration, createdBy);
+        Map<String, Object> meeting = zoomService.createMeetingJoin(topic, startDateTime, duration, createdBy,type, status);
         return ResponseEntity.ok(meeting);
     }
 
