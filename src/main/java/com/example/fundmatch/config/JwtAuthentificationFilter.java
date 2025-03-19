@@ -31,6 +31,7 @@ public class JwtAuthentificationFilter  extends OncePerRequestFilter {
             "/api/startups/all",
             "/api/events/all",
             "/api/sectors/all",
+            "/api/roles",
             "/api/startups/detail/id"
     );
 

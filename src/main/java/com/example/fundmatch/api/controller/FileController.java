@@ -12,7 +12,8 @@ import java.nio.file.Paths;
 @RequestMapping("/api/files")
 public class FileController {
 
-    private final String uploadDir = "src/main/resources/static/uploads/"; // Dossier où sont stockées les images
+    private final String uploadDir = "src/main/resources/static/uploads/";
+//    private final String uploadDir = "/app/uploads/"; for docker
 
     @GetMapping("/{filename}")
     public ResponseEntity<Resource> getFile(@PathVariable String filename) {

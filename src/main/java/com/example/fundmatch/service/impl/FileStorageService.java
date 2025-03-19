@@ -13,6 +13,7 @@ import java.util.UUID;
 @Service
 public class FileStorageService {
     private final String uploadDir = "src/main/resources/static/uploads/";
+//    private final String uploadDir = "/app/uploads/"; for docker
 
     public String saveFile(MultipartFile file) throws IOException, IOException {
         System.out.println("Saving file " + file.getOriginalFilename());
