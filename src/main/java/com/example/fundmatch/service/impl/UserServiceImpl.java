@@ -1,4 +1,5 @@
 package com.example.fundmatch.service.impl;
+import com.example.fundmatch.domain.dtos.request.user.UserRequest;
 import com.example.fundmatch.domain.entities.User;
 import com.example.fundmatch.domain.mappers.UserMapper;
 import com.example.fundmatch.domain.vm.UserResponseVM;
@@ -36,5 +37,19 @@ public class UserServiceImpl implements UserService {
         User updatedUser = userRepository.save(user);
         return userMapper.toEntity(updatedUser);
     }
+    @Override
+    public UserResponseVM updateUser(Long userId, UserRequest userRequest) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        user.setFirstName(userRequest.getFirstName());
+        user.setLastName(userRequest.getLastName());
+        user.setEmail(userRequest.getEmail());
+        user.setPhoneNumber(userRequest.getPhoneNumber());
+
+        User updatedUser = userRepository.save(user);
+        return userMapper.toEntity(updatedUser);
+    }
+
 
 }
