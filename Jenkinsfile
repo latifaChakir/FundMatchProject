@@ -8,7 +8,7 @@ pipeline {
 
     environment {
         SPRING_DATASOURCE_URL = 'jdbc:postgresql://localhost:5432/fundmatch'
-        DOCKER_IMAGE = 'fundMatch-System'
+        DOCKER_IMAGE = 'fundmatch-system'
         DOCKER_TAG = "${BUILD_NUMBER}"
     }
 
@@ -87,12 +87,12 @@ pipeline {
     post {
         success {
             mail to: 'chakirlatifa2001@gmail.com',
-                 subject: "Pipeline Success - eBankify",
+                 subject: "Pipeline Success - FundMatchProject",
                  body: "Le pipeline Jenkins s'est terminé avec succès !"
         }
         failure {
             mail to: 'chakirlatifa2001@gmail.com',
-                 subject: "Pipeline Failure - eBankify",
+                 subject: "Pipeline Failure - FundMatchProject",
                  body: "Le pipeline Jenkins a échoué. Veuillez vérifier les logs."
         }
     }
