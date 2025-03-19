@@ -20,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StageController {
     private final StageService stageService;
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('Admin')")
     @PostMapping("/save")
     public ResponseEntity<ApiResponse<StageResponseVM>> saveStage(@Valid @RequestBody StageRequest stageRequest) {
         StageResponseVM response = stageService.saveStage(stageRequest);
