@@ -37,11 +37,11 @@ public class InvestorController{
         ApiResponse<InvestorResponseVM> apiResponse = ApiResponse.success(response, "/api/investors");
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
     }
-    @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> deleteInvestor(@PathVariable long id) {
+    @DeleteMapping("/delete/{id}")
+    public String deleteInvestor(@PathVariable long id) {
         investorService.deleteInvestor(id);
         ApiResponse<Void> apiResponse = ApiResponse.success(null, "/api/investors");
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(apiResponse);
+        return "Successfully deleted";
     }
     @GetMapping
     public ResponseEntity<ApiResponse<List<InvestorResponseVM>>> getAllInvestors() {

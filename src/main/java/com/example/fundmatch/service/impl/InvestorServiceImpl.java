@@ -9,6 +9,7 @@ import com.example.fundmatch.repository.UserRepository;
 import com.example.fundmatch.security.CustomUserDetails;
 import com.example.fundmatch.shared.exception.ProjectNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.Authentication;
 import com.example.fundmatch.domain.dtos.request.investor.CreateInvestorRequestDto;
@@ -21,6 +22,7 @@ import com.example.fundmatch.shared.exception.InvestorNotFoundException;
 import com.example.fundmatch.shared.exception.InvestorOrganizationAlreadyExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,14 +106,44 @@ public class InvestorServiceImpl implements InvestorService {
         return investorMapper.toDto(updatedInvestor);
     }
 
+    @Transactional
     @Override
     public void deleteInvestor(Long id) {
-        Optional<Investor> investor = investorRepository.findById(id);
-        if (investor.isEmpty()) {
-            throw new InvestorNotFoundException("Investor not found.");
+        Investor investor = investorRepository.findById(id)
+                .orElseThrow(() -> new InvestorNotFoundException("Investor not found."));
+
+        try {
+            System.out.println("Deleting related data for investor with ID: " + investor.getId());
+            investorRepository.deleteInvestorSectors(investor.getId());
+            System.out.println("Investor sectors deleted");
+
+            investorRepository.deleteInvestorPreferredGeographies(investor.getId());
+            System.out.println("Investor preferred geographies deleted");
+
+            investorRepository.deleteInvestorSavedProjects(investor.getId());
+            System.out.println("Investor saved projects deleted");
+
+            investorRepository.deleteInvestorFeedbacks(investor.getId());
+            System.out.println("Investor feedbacks deleted");
+
+            investorRepository.deleteInvestorMeetings(investor.getId());
+            System.out.println("Investor meetings deleted");
+            investorRepository.flush();
+
+            investorRepository.deleteInvestorById(investor.getId());
+            System.out.println("Investor deleted");
+            investorRepository.flush();
+
+            boolean exists = investorRepository.existsById(investor.getId());
+            System.out.println("Investor exists after delete: " + exists);
+
+        } catch (Exception e) {
+            System.err.println("Error during investor deletion: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
         }
-        investorRepository.delete(investor.get());
     }
+
 
     @Override
     public List<InvestorResponseVM> getInvestors() {

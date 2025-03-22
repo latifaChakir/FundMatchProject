@@ -52,9 +52,9 @@ public class Investor {
     )
     private List<Project> savedProjects;
 
-    @OneToMany(mappedBy = "investor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "investor", cascade = CascadeType.ALL, fetch = FetchType.LAZY,  orphanRemoval = true)
     private List<Feedback> feedbacks;
 
-    @OneToMany(mappedBy = "investor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "investor", cascade = CascadeType.ALL, fetch = FetchType.LAZY,  orphanRemoval = true)
     private List<Meeting> meetings;
 }
