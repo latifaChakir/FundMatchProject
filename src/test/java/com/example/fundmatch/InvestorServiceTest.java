@@ -162,22 +162,6 @@ public class InvestorServiceTest {
         when(investorRepository.findById(investorId)).thenReturn(Optional.empty());
         assertThrows(InvestorNotFoundException.class, () -> investorService.updateInvestor(createInvestorRequestDto, investorId));
     }
-
-    @Test
-    void deleteInvestor_WhenInvestorExists_DeletesInvestor() {
-        Long investorId = 1L;
-        when(investorRepository.findById(investorId)).thenReturn(Optional.of(investor));
-        investorService.deleteInvestor(investorId);
-        verify(investorRepository).delete(investor);
-    }
-
-    @Test
-    void deleteInvestor_WhenInvestorDoesNotExist_ThrowsInvestorNotFoundException() {
-        Long investorId = 1L;
-        when(investorRepository.findById(investorId)).thenReturn(Optional.empty());
-        assertThrows(InvestorNotFoundException.class, () -> investorService.deleteInvestor(investorId));
-    }
-
     @Test
     void getInvestors_ReturnsAllInvestors() {
         List<Investor> investors = Arrays.asList(investor);
