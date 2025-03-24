@@ -10,7 +10,9 @@ import java.util.List;
 public interface EventService{
     EventResponseVM saveEvent(CreateEventRequestDto eventRequest, MultipartFile file) throws IOException;
     EventResponseVM getEventById(Long id);
-    EventResponseVM updateEvent(CreateEventRequestDto eventRequest, Long id);
+
+    EventResponseVM updateEvent(CreateEventRequestDto eventRequest, Long id, MultipartFile file) throws IOException;
+
     void deleteEvent(Long id);
     List<EventResponseVM> getEvents();
     List<EventResponseVM> getEventsToAccepte();

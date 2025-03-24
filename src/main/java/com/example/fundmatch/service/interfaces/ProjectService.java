@@ -10,7 +10,9 @@ import java.util.List;
 public interface ProjectService  {
     ProjectResponseVM saveProject(CreateProjectRequestDto projectRequest ,MultipartFile file) throws IOException;
     ProjectResponseVM getProjectById(Long id);
-    ProjectResponseVM updateProject(CreateProjectRequestDto projectRequest, Long id);
+
+    ProjectResponseVM updateProject(CreateProjectRequestDto projectRequest, Long id, MultipartFile file) throws IOException;
+
     void deleteProject(Long id);
     List<ProjectResponseVM> getProjects();
     ProjectResponseVM updateStatus(Long projectId);

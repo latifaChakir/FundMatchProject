@@ -47,13 +47,17 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventResponseVM updateEvent(CreateEventRequestDto eventRequest, Long id) {
+    public EventResponseVM updateEvent(CreateEventRequestDto eventRequest, Long id, MultipartFile file) throws IOException {
         Optional<Event> optionalEvent = eventRepository.findById(id);
         if (optionalEvent.isEmpty()) {
             throw new EventNotFoundException("Event not found.");
         }
 
         Event existingEvent = optionalEvent.get();
+
+        String imagePath = (file != null) ? fileStorageService.saveFile(file) : existingEvent.getImagePath();
+        existingEvent.setImagePath(imagePath);
+
         existingEvent.setTitle(eventRequest.getTitle());
         existingEvent.setDescription(eventRequest.getDescription());
         existingEvent.setDate(Date.valueOf(eventRequest.getDate()).toLocalDate());
@@ -61,6 +65,7 @@ public class EventServiceImpl implements EventService {
         existingEvent.setCost(eventRequest.getCost());
         existingEvent.setType(EventType.valueOf(eventRequest.getType().name()));
         existingEvent.setMaxParticipants(eventRequest.getMaxParticipants());
+        existingEvent.setSector(eventRequest.getSector());
 
         Event updatedEvent = eventRepository.save(existingEvent);
         return eventMapper.toDto(updatedEvent);

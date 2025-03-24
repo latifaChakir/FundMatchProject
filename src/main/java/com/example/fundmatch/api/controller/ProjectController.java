@@ -30,8 +30,8 @@ public class ProjectController {
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<ProjectResponseVM>> updateProject(@PathVariable long id , @Valid @RequestBody CreateProjectRequestDto ProjectRequest) {
-        ProjectResponseVM response = projectService.updateProject(ProjectRequest, id);
+    public ResponseEntity<ApiResponse<ProjectResponseVM>> updateProject(@PathVariable long id , @Valid @ModelAttribute CreateProjectRequestDto ProjectRequest , @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
+        ProjectResponseVM response = projectService.updateProject(ProjectRequest, id, file);
         ApiResponse<ProjectResponseVM> apiResponse = ApiResponse.success(response, "/api/projects");
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
     }

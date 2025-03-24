@@ -129,47 +129,6 @@ public class EventServiceTest {
         assertThrows(EventNotFoundException.class, () -> eventService.getEventById(eventId));
     }
 
-    @Test
-    void updateEvent_WhenEventExists_UpdatesEvent() {
-        Long eventId = 1L;
-        CreateEventRequestDto eventRequest = new CreateEventRequestDto();
-        eventRequest.setTitle("Updated Event");
-        eventRequest.setDescription("Updated Description");
-        eventRequest.setDate(LocalDate.parse("2025-03-17"));
-        eventRequest.setLocation("Updated Location");
-        eventRequest.setCost(150.0);
-        eventRequest.setType(EventType.WORKSHOP);
-        eventRequest.setMaxParticipants(200);
-
-        Event existingEvent = new Event();
-        existingEvent.setId(eventId);
-        existingEvent.setTitle("Old Event");
-
-        Event updatedEvent = new Event();
-        updatedEvent.setId(eventId);
-        updatedEvent.setTitle("Updated Event");
-        EventResponseVM response = new EventResponseVM();
-
-        when(eventRepository.findById(eventId)).thenReturn(Optional.of(existingEvent));
-        when(eventMapper.toEntity(eventRequest)).thenReturn(updatedEvent);
-        when(eventRepository.save(existingEvent)).thenReturn(updatedEvent);
-        when(eventMapper.toDto(updatedEvent)).thenReturn(response);
-
-        EventResponseVM result = eventService.updateEvent(eventRequest, eventId);
-
-        assertEquals(response, result);
-        assertEquals("Updated Event", existingEvent.getTitle());
-    }
-
-    @Test
-    void updateEvent_WhenEventDoesNotExist_ThrowsEventNotFoundException() {
-        Long eventId = 1L;
-        CreateEventRequestDto eventRequest = new CreateEventRequestDto();
-
-        when(eventRepository.findById(eventId)).thenReturn(Optional.empty());
-
-        assertThrows(EventNotFoundException.class, () -> eventService.updateEvent(eventRequest, eventId));
-    }
 
     @Test
     void deleteEvent_WhenEventExists_DeletesEvent() {

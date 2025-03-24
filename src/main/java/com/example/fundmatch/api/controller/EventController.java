@@ -28,9 +28,9 @@ public class EventController{
         ApiResponse<EventResponseVM> apiResponse = ApiResponse.success(response, "/api/events/save");
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
     }
-    @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<EventResponseVM>> updateEvent(@PathVariable long id , @Valid @RequestBody CreateEventRequestDto eventRequest) {
-        EventResponseVM response = eventService.updateEvent(eventRequest, id);
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponse<EventResponseVM>> updateEvent(@PathVariable long id , @Valid @ModelAttribute CreateEventRequestDto eventRequest , @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
+        EventResponseVM response = eventService.updateEvent(eventRequest, id, file);
         ApiResponse<EventResponseVM> apiResponse = ApiResponse.success(response, "/api/events");
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
     }

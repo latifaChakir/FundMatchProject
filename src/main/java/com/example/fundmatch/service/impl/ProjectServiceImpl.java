@@ -58,9 +58,13 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectResponseVM updateProject(CreateProjectRequestDto projectRequest, Long id) {
+    public ProjectResponseVM updateProject(CreateProjectRequestDto projectRequest, Long id, MultipartFile file) throws IOException {
         Project project = projectRepository.findById(id)
                 .orElseThrow(() -> new ProjectNotFoundException("Project not found."));
+
+        String imagePath = (file != null && !file.isEmpty()) ? fileStorageService.saveFile(file) : project.getImagePath();
+        project.setImagePath(imagePath);
+
         project.setTitle(projectRequest.getTitle());
         project.setDescription(projectRequest.getDescription());
         project.setFundingAmount(projectRequest.getFundingAmount());
@@ -71,6 +75,7 @@ public class ProjectServiceImpl implements ProjectService {
         Project updatedProject = projectRepository.save(project);
         return projectMapper.toDto(updatedProject);
     }
+
 
     @Override
     public void deleteProject(Long id) {

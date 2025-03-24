@@ -16,6 +16,7 @@ public interface EventMapper {
     EventMapper INSTANCE = Mappers.getMapper(EventMapper.class);
 
     @Mapping(source = "imagePath", target = "imagePath", qualifiedByName = "mapImagePath")
+    @Mapping(source = "sector", target = "sector")
     Event toEntity(CreateEventRequestDto dto);
 
     @Mapping(source = "imagePath", target = "imagePath", qualifiedByName = "mapImagePathFromEntity")
